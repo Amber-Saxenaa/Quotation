@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TBHS | Quotation Studio — Test Version</title>
+<style>
+:root{
+  --maroon:#641d25;--red:#8f2733;--red2:#a83b45;--blush:#f6e9e8;--paper:#fffdfc;
+  --ink:#30282a;--muted:#786d6f;--line:#e7d9d8;--soft:#fbf5f4;--green:#2d725b;
+  --shadow:0 8px 26px rgba(60,20,25,.09);
+}
+*{box-sizing:border-box} body{margin:0;background:#f4eeee;color:var(--ink);font:14px/1.45 Inter,Segoe UI,Arial,sans-serif}
+button,input,select,textarea{font:inherit} button{cursor:pointer}
+.app{min-height:100vh;display:grid;grid-template-columns:220px minmax(290px,360px) minmax(500px,1fr)}
+.sidebar{background:linear-gradient(180deg,#51151c,#70232c);color:#fff;padding:24px 16px;display:flex;flex-direction:column;gap:24px}
+.brand{padding:8px 10px 18px;border-bottom:1px solid #ffffff30}.brand-mark{font-family:Georgia,serif;font-size:35px;letter-spacing:-3px}.brand small{display:block;font-size:10px;letter-spacing:2px;opacity:.85}
+.nav{display:grid;gap:6px}.nav button{border:0;background:transparent;color:#f8e9e9;text-align:left;padding:11px 12px;border-radius:9px}.nav button.active,.nav button:hover{background:#ffffff20}.nav span{display:inline-block;width:26px}
+.sidefoot{margin-top:auto;font-size:11px;opacity:.8}
+.editor{padding:22px 18px;background:#fbf7f6;border-right:1px solid var(--line);max-height:100vh;overflow:auto}
+h1,h2,h3,p{margin-top:0} h1{font-size:21px;margin-bottom:4px} h2{font-size:15px;margin-bottom:12px} h3{font-size:12px;color:var(--maroon);margin-bottom:8px}
+.sub{color:var(--muted);font-size:12px;margin-bottom:20px}
+.steps{display:flex;gap:8px;margin:18px 0}.step{flex:1;text-align:center;font-size:10px;color:var(--muted);border-bottom:2px solid var(--line);padding:7px 0}.step.active{color:var(--red);border-color:var(--red);font-weight:700}
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:0 2px 8px #521b2010}
+label{display:block;font-size:11px;font-weight:650;color:#6c5053;margin:9px 0 4px}
+input,select,textarea{width:100%;border:1px solid #e4d7d6;border-radius:7px;padding:8px 9px;background:#fff;color:var(--ink);outline:none}
+input:focus,select:focus,textarea:focus{border-color:#b15a62;box-shadow:0 0 0 2px #a83b4518}
+textarea{resize:vertical;min-height:55px}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+.btn{border:1px solid var(--line);background:white;color:var(--maroon);padding:9px 12px;border-radius:8px;font-weight:650}.btn.primary{background:var(--red);color:white;border-color:var(--red)}.btn.dark{background:var(--maroon);color:white;border-color:var(--maroon)}.btn.small{padding:5px 8px;font-size:11px}.btn:hover{filter:brightness(.97)}.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.catalogue-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #f0e7e6}.catalogue-item:last-child{border-bottom:0}.catalogue-item b{font-size:12px}.catalogue-item small{display:block;color:var(--muted);font-size:10px}
+.product-search{margin-bottom:7px}.mini-note{font-size:10px;color:var(--muted);line-height:1.5}
+.workspace{padding:22px;min-width:0;overflow:auto}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.topbar p{margin:0;color:var(--muted);font-size:12px}.top-actions{display:flex;gap:7px;flex-wrap:wrap}
+.designs{display:flex;gap:8px;flex-wrap:wrap}.design{border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:#fff;min-width:120px;flex:1}.design.selected{border-color:var(--red);box-shadow:0 0 0 2px #a83b4517}.design strong{display:block;font-size:12px}.design small{color:var(--muted);font-size:10px}
+.preview-wrap{display:flex;justify-content:center;padding:18px 0 40px}.paper{width:min(100%,820px);min-height:1000px;background:var(--paper);box-shadow:var(--shadow);border:1px solid #e4d7d6;padding:35px 38px;position:relative}
+.paper-head{display:flex;align-items:center;justify-content:space-between;gap:18px;border-bottom:4px solid var(--maroon);padding-bottom:15px}.logo{display:flex;align-items:center;gap:12px}.logo-mark{font:32px Georgia,serif;color:var(--maroon);letter-spacing:-3px}.logo-text{font-size:16px;line-height:1.1;font-weight:800;letter-spacing:.4px}.logo-text small{font-size:8px;letter-spacing:1.5px;display:block;margin-top:5px;color:var(--muted)}
+.company-info{text-align:right;font-size:9px;color:#64585a;max-width:270px}.ribbon{background:var(--maroon);color:white;text-align:center;font-size:9px;padding:6px;margin-bottom:19px}
+.quote-heading{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;margin:18px 0}.quote-heading h2{font: bold 30px Georgia,serif;color:var(--red);margin:0}.quote-meta{font-size:10px;background:var(--soft);border:1px solid var(--line);border-radius:7px;padding:10px;min-width:210px}.quote-meta div{display:flex;gap:8px;margin:2px 0}.quote-meta b{min-width:78px}
+.parties{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}.party{background:var(--soft);border:1px solid #efe3e2;border-radius:7px;padding:11px;font-size:10px;min-height:110px}.party h3{border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:6px}.party p{margin:3px 0;white-space:pre-wrap}.spec{font-size:10px;background:#f7e9e8;padding:9px;border-radius:6px;margin-bottom:16px}.section-title{background:var(--maroon);color:#fff;padding:6px 10px;border-radius:6px 6px 0 0;font-size:10px;font-weight:800;letter-spacing:.4px;margin-top:13px}
+table{width:100%;border-collapse:collapse} .items-table{font-size:9px}.items-table th{background:#8b2933;color:#fff;font-size:8px;padding:7px 4px;text-align:left;white-space:nowrap}.items-table td{border:1px solid #eadfdd;padding:6px 4px;vertical-align:top}.items-table tbody tr:nth-child(even){background:#fcf7f6}.num{text-align:right;white-space:nowrap}.empty{text-align:center!important;padding:28px!important;color:#99888a}
+.section-total{width:48%;margin:0 0 12px auto;font-size:9px}.section-total td{padding:4px 7px;border:1px solid #eadfdd}.section-total tr:last-child{background:var(--maroon);color:white;font-weight:800}
+.final-totals{width:54%;margin:20px 0 20px auto;font-size:10px}.final-totals td{padding:6px 9px;border:1px solid var(--line)}.final-totals tr:last-child{background:var(--maroon);color:white;font-weight:800;font-size:12px}
+.terms{border-top:1px solid var(--line);padding-top:12px;font-size:9px;white-space:pre-wrap}.signature{display:flex;justify-content:space-between;margin-top:40px;font-size:9px}.signline{border-top:1px solid #a99698;padding-top:6px;width:170px;text-align:center}
+.paper-foot{position:absolute;bottom:15px;left:38px;right:38px;border-top:3px solid var(--maroon);padding-top:7px;display:flex;justify-content:space-between;font-size:8px;color:var(--muted)}
+.badge{background:#f4e4e4;color:var(--maroon);border-radius:99px;padding:4px 8px;font-size:10px;font-weight:700}.status{color:var(--green);font-size:11px}
+.toast{position:fixed;right:20px;bottom:20px;background:#30282a;color:white;padding:12px 16px;border-radius:9px;box-shadow:var(--shadow);display:none;z-index:5}
+body.format-classic .section-total{display:none}body.format-classic .section-title{background:#f0e3e2;color:var(--maroon)}
+body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .quote-heading h2{letter-spacing:2px}
+@media(max-width:1200px){.app{grid-template-columns:70px minmax(270px,330px) minmax(460px,1fr)}.sidebar{padding:18px 9px}.brand-mark{font-size:23px}.brand small,.nav .navtext,.sidefoot{display:none}.nav button{text-align:center;padding:12px 4px}.nav span{width:auto}}
+@media(max-width:850px){.app{display:block}.sidebar{display:none}.editor{max-height:none;border-right:0}.workspace{padding:12px}.paper{padding:20px;min-height:950px}.paper-foot{left:20px;right:20px}.parties{grid-template-columns:1fr}.quote-heading{flex-direction:column}.quote-meta{width:100%}.company-info{font-size:8px}.items-table{font-size:8px}.items-table th,.items-table td{padding:4px 2px}.hide-mobile{display:none}}
+@media print{body{background:#fff}.sidebar,.editor,.topbar,.design-picker,.no-print{display:none!important}.app{display:block}.workspace{padding:0;overflow:visible}.preview-wrap{padding:0;display:block}.paper{width:100%;min-height:0;border:0;box-shadow:none;padding:12mm 10mm 18mm;margin:0;page-break-after:always}.paper:last-child{page-break-after:auto}.paper-foot{position:fixed;bottom:5mm;left:10mm;right:10mm}.section-title{break-after:avoid}.items-table tr{break-inside:avoid} @page{size:A4;margin:0}}
+</style>
+</head>
+<body class="format-section">
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">TBHS</div><small>THE BIG HOTEL STORE</small></div>
+    <nav class="nav">
+      <button><span>⌂</span><span class="navtext">Dashboard</span></button>
+      <button class="active"><span>▤</span><span class="navtext">Create Quotation</span></button>
+      <button onclick="showHistory()"><span>◷</span><span class="navtext">Manage Quotations</span></button>
+      <button onclick="document.getElementById('catalogPanel').scrollIntoView({behavior:'smooth'})"><span>▦</span><span class="navtext">Product Catalogue</span></button>
+      <button onclick="document.getElementById('customerName').focus()"><span>♙</span><span class="navtext">Customers</span></button>
+      <button><span>♧</span><span class="navtext">Employees</span></button>
+      <button onclick="exportHistory()"><span>▤</span><span class="navtext">Reports / Export</span></button>
+      <button><span>⚙</span><span class="navtext">Settings</span></button>
+    </nav>
+    <div class="sidefoot">Your Partner in Hospitality Excellence</div>
+  </aside>
+
+  <aside class="editor">
+    <h1>Create Quotation</h1><div class="sub">Test version · Local demo data</div>
+    <div class="steps"><div class="step active">1 Details</div><div class="step active">2 Products</div><div class="step active">3 Preview</div></div>
+    <section class="panel">
+      <h3>QUOTATION DETAILS</h3>
+      <label>Quotation No.</label><input id="quoteNo" value="QT-TBHS-EQP-000001">
+      <div class="two"><div><label>Date</label><input id="quoteDate" type="date"></div><div><label>Expiry Date</label><input id="expiryDate" type="date"></div></div>
+      <label>Prepared By</label><input id="preparedBy" placeholder="Employee name">
+    </section>
+    <section class="panel">
+      <h3>CUSTOMER DETAILS</h3>
+      <label>Customer / Hotel Name *</label><input id="customerName" value="Sample Hotel & Resort" placeholder="Customer name">
+      <label>Address</label><textarea id="customerAddress">Lucknow, Uttar Pradesh</textarea>
+      <div class="two"><div><label>GSTIN</label><input id="customerGST" placeholder="Customer GSTIN"></div><div><label>Contact Person</label><input id="contactPerson" placeholder="Contact name"></div></div>
+      <div class="two"><div><label>Mobile</label><input id="customerMobile" placeholder="Phone"></div><div><label>Email</label><input id="customerEmail" placeholder="Email"></div></div>
+    </section>
+    <section class="panel">
+      <h3>BILLING PARTNER</h3>
+      <label>Company / Partner</label><input id="partnerName" value="TBHS Billing Partner">
+      <div class="two"><div><label>Bank</label><input id="bankName" placeholder="Bank name"></div><div><label>Branch</label><input id="bankBranch" placeholder="Branch"></div></div>
+      <div class="two"><div><label>A/C No.</label><input id="bankAccount" placeholder="Account number"></div><div><label>IFSC</label><input id="bankIFSC" placeholder="IFSC"></div></div>
+      <label>Order By / Reference</label><input id="orderBy" placeholder="Contact or reference">
+    </section>
+    <section class="panel">
+      <h3>CUSTOM ITEMS SPECIFICATION</h3>
+      <textarea id="specifications" placeholder="Special requirements, specifications, delivery notes...">Demo specification — replace this text with the actual project requirements.</textarea>
+    </section>
+    <section class="panel">
+      <h3>QUOTATION SETTINGS</h3>
+      <label>Design Format</label>
+      <select id="formatSelect" onchange="setFormat(this.value)">
+        <option value="classic">Format A — Classic</option>
+        <option value="section" selected>Format B — Section Wise</option>
+        <option value="premium">Format C — Premium</option>
+      </select>
+      <div class="two"><div><label>GST default (%)</label><input id="defaultGST" type="number" min="0" max="100" value="18" onchange="renderQuote()"></div><div><label>Global discount (%)</label><input id="globalDiscount" type="number" min="0" max="100" value="0" onchange="renderQuote()"></div></div>
+      <label>Terms & Conditions</label><textarea id="terms">1. Prices are subject to final confirmation.
+2. Delivery and installation as mutually agreed.
+3. Taxes are calculated as shown in this quotation.
+4. Quotation valid until the expiry date mentioned above.</textarea>
+      <div class="actions"><button class="btn primary" onclick="renderQuote()">Update Preview</button><button class="btn" onclick="saveQuote()">Save Test Quote</button></div>
+    </section>
+    <section class="panel" id="catalogPanel">
+      <h3>PRODUCT CATALOGUE <span class="badge" id="catalogCount">8 demo items</span></h3>
+      <input class="product-search" id="productSearch" placeholder="Search brand, code, model, product..." oninput="renderCatalogue()">
+      <div id="catalogueList"></div>
+      <details style="margin-top:10px"><summary style="font-size:12px;color:var(--maroon);cursor:pointer;font-weight:700">+ Add a catalogue product</summary>
+        <label>Product name</label><input id="newName" placeholder="e.g. Soup Bowl">
+        <div class="two"><div><label>Brand</label><input id="newBrand" placeholder="Brand"></div><div><label>Item code</label><input id="newCode" placeholder="Code"></div></div>
+        <div class="two"><div><label>Model</label><input id="newModel" placeholder="Model"></div><div><label>Unit</label><input id="newUnit" value="PCS"></div></div>
+        <div class="two"><div><label>Rate (₹)</label><input id="newRate" type="number" value="0"></div><div><label>GST %</label><input id="newGST" type="number" value="18"></div></div>
+        <div class="actions"><button class="btn primary" onclick="addCatalogueProduct()">Add Product</button></div>
+      </details>
+      <p class="mini-note" style="margin-top:12px">Demo catalogue is stored in this browser only. Importing your real Excel/PDF catalogue and connecting a shared database will be a later step.</p>
+    </section>
+  </aside>
+
+  <main class="workspace">
+    <div class="topbar">
+      <div><h1>Quotation Preview</h1><p>Live A4 preview · Edit details or add products on the left</p></div>
+      <div class="top-actions"><button class="btn" onclick="exportCSV()">Export CSV</button><button class="btn" onclick="exportHistory()">History CSV</button><button class="btn primary" onclick="window.print()">Print / Save PDF</button></div>
+    </div>
+    <div class="design-picker panel no-print">
+      <h3>CHOOSE QUOTATION DESIGN</h3>
+      <div class="designs">
+        <button class="design" id="design-classic" onclick="setFormat('classic')"><strong>Format A · Classic</strong><small>Clean, simple item list</small></button>
+        <button class="design selected" id="design-section" onclick="setFormat('section')"><strong>Format B · Section Wise</strong><small>Sections and individual totals</small></button>
+        <button class="design" id="design-premium" onclick="setFormat('premium')"><strong>Format C · Premium</strong><small>Polished project style</small></button>
+      </div>
+    </div>
+    <div class="preview-wrap"><article class="paper" id="paper">
+      <header class="paper-head">
+        <div class="logo"><div class="logo-mark">TBHS</div><div class="logo-text">THE BIG<br>HOTEL STORE<small>HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS</small></div></div>
+        <div class="company-info"><b>THE BIG HOTEL STORE</b><br>Branch / Address: Replace with official company details<br>Phone: Replace with official contact details<br>Email / Website: Replace with official details</div>
+      </header>
+      <div class="ribbon">FABRICATED & IMPORTED KITCHEN EQUIPMENT · HORECA · CHAFING & BUFFET DISPLAY</div>
+      <div class="quote-heading"><h2>QUOTATION</h2><div class="quote-meta" id="metaPreview"></div></div>
+      <div class="parties">
+        <section class="party"><h3>BILL TO</h3><div id="billPreview"></div></section>
+        <section class="party"><h3>BILLING PARTNER</h3><div id="partnerPreview"></div></section>
+      </div>
+      <div class="spec"><b>Custom Items Specification</b><div id="specPreview"></div></div>
+      <div id="itemsPreview"></div>
+      <table class="final-totals" id="finalTotals"></table>
+      <section class="terms"><b>TERMS & CONDITIONS</b><div id="termsPreview"></div></section>
+      <div class="signature"><div class="signline">Customer Acceptance / Signature</div><div class="signline">For The Big Hotel Store</div></div>
+      <footer class="paper-foot"><span>www.thebighotelstore.com · Test template — verify all details</span><span id="pageLabel">Page 1</span></footer>
+    </article></div>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const DEMO_CATALOGUE = [
+ {id:1,name:"Coffee Cup 200ml",brand:"Ariane",code:"P-20",model:"",unit:"PCS",rate:450,gst:18,category:"Restaurant"},
+ {id:2,name:"Sauce Bowl",brand:"KTC",code:"K-32",model:"",unit:"PCS",rate:250,gst:18,category:"Restaurant"},
+ {id:3,name:"Water Glass 300ml",brand:"Bormioli",code:"B-11",model:"",unit:"PCS",rate:120,gst:18,category:"Restaurant"},
+ {id:4,name:"Trolley",brand:"KTC",code:"T-14",model:"",unit:"PCS",rate:12000,gst:18,category:"Banquet"},
+ {id:5,name:"Food Pan 1/1",brand:"Cambro",code:"C-09",model:"",unit:"PCS",rate:1800,gst:18,category:"Banquet"},
+ {id:6,name:"Induction Cooktop",brand:"Fagor",code:"F-03",model:"",unit:"PCS",rate:29000,gst:18,category:"Kitchen"},
+ {id:7,name:"Food Warmer",brand:"Hamilton",code:"G-12",model:"",unit:"PCS",rate:4500,gst:18,category:"Kitchen"},
+ {id:8,name:"Exhaust Hood",brand:"Demo Brand",code:"EX-01",model:"EH-900",unit:"PCS",rate:28000,gst:18,category:"Ducting"}
+];
+let catalogue = JSON.parse(localStorage.getItem("tbhs_catalogue") || "null") || DEMO_CATALOGUE.slice();
+let items = [
+ {id:101,section:"Banquet",code:"P-20",name:"Coffee Cup 200ml",brand:"Ariane",model:"",type:"Crockery",size:"200 ml",qty:24,unit:"PCS",rate:450,discount:0,gst:18},
+ {id:102,section:"Banquet",code:"K-32",name:"Sauce Bowl",brand:"KTC",model:"",type:"Crockery",size:"6 inch",qty:12,unit:"PCS",rate:250,discount:5,gst:18},
+ {id:103,section:"Restaurant",code:"EX-01",name:"Exhaust Hood",brand:"Demo Brand",model:"EH-900",type:"Ducting",size:"900 mm",qty:1,unit:"PCS",rate:28000,discount:0,gst:18}
+];
+let currentFormat="section";
+const money=n=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:2}).format(Number(n)||0);
+const num=n=>Number(n)||0;
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const val=id=>document.getElementById(id).value;
+function dateISO(offset=0){let d=new Date();d.setDate(d.getDate()+offset);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+document.getElementById("quoteDate").value=dateISO(0);document.getElementById("expiryDate").value=dateISO(14);
+function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.style.display="block";setTimeout(()=>el.style.display="none",2300)}
+function setFormat(format){currentFormat=format;document.body.className="format-"+format;["classic","section","premium"].forEach(f=>document.getElementById("design-"+f).classList.toggle("selected",f===format));document.getElementById("formatSelect").value=format;renderQuote()}
+function addProduct(p){items.push({id:Date.now()+Math.random(),section:p.category||"General",code:p.code||"",name:p.name||"New product",brand:p.brand||"",model:p.model||"",type:p.category||"",size:"",qty:1,unit:p.unit||"PCS",rate:num(p.rate),discount:0,gst:p.gst===undefined?num(val("defaultGST")):num(p.gst)});renderQuote();toast("Product added to quotation")}
+function renderCatalogue(){const q=val("productSearch").toLowerCase();const list=catalogue.filter(p=>[p.name,p.brand,p.code,p.model,p.category].join(" ").toLowerCase().includes(q));document.getElementById("catalogCount").textContent=catalogue.length+" items";document.getElementById("catalogueList").innerHTML=list.map(p=>`<div class="catalogue-item"><div><b>${esc(p.name)}</b><small>${esc(p.brand)} · ${esc(p.code)} · ${esc(p.category||"General")} · ${money(p.rate)}</small></div><button class="btn small" onclick="addFromCatalogue(${p.id})">+ Add</button></div>`).join("")||'<p class="mini-note">No matching products.</p>'}
+function addFromCatalogue(id){const p=catalogue.find(x=>x.id===id);if(p)addProduct(p)}
+function addCatalogueProduct(){const name=val("newName").trim();if(!name){toast("Enter a product name first");return}const p={id:Date.now(),name,brand:val("newBrand"),code:val("newCode"),model:val("newModel"),unit:val("newUnit")||"PCS",rate:num(val("newRate")),gst:num(val("newGST")),category:"General"};catalogue.push(p);localStorage.setItem("tbhs_catalogue",JSON.stringify(catalogue));["newName","newBrand","newCode","newModel"].forEach(id=>document.getElementById(id).value="");renderCatalogue();toast("Catalogue product saved in this browser")}
+function itemNet(i){return num(i.qty)*num(i.rate)*(1-num(i.discount)/100)}
+function itemGST(i){return itemNet(i)*num(i.gst)/100}
+function groupedItems(){const groups={};items.forEach(i=>{const key=currentFormat==="classic"?"All Items":(i.section||"General");(groups[key] ||= []).push(i)});return groups}
+function renderQuote(){
+ const meta=document.getElementById("metaPreview");meta.innerHTML=`<div><b>Quotation No.</b><span>${esc(val("quoteNo"))}</span></div><div><b>Date</b><span>${esc(val("quoteDate"))}</span></div><div><b>Expiry Date</b><span>${esc(val("expiryDate"))}</span></div>`;
+ document.getElementById("billPreview").innerHTML=`<p><b>${esc(val("customerName")||"Customer name")}</b></p><p>${esc(val("customerAddress"))}</p><p>GSTIN: ${esc(val("customerGST")||"—")}</p><p>Contact: ${esc(val("contactPerson")||"—")} · ${esc(val("customerMobile")||"—")}</p><p>Email: ${esc(val("customerEmail")||"—")}</p>`;
+ document.getElementById("partnerPreview").innerHTML=`<p><b>${esc(val("partnerName")||"—")}</b></p><p>Bank: ${esc(val("bankName")||"—")}</p><p>Branch: ${esc(val("bankBranch")||"—")}</p><p>A/C No.: ${esc(val("bankAccount")||"—")}</p><p>IFSC: ${esc(val("bankIFSC")||"—")}</p><p>Order By: ${esc(val("orderBy")||"—")}</p>`;
+ document.getElementById("specPreview").textContent=val("specifications")||"—";
+ const groups=groupedItems();let html="",basic=0,gst=0,discountTotal=0;
+ Object.entries(groups).forEach(([section,arr],gi)=>{
+   html+=`<div class="section-title">${currentFormat==="classic"?"":`${gi+1}. `}${esc(section.toUpperCase())}</div><table class="items-table"><thead><tr><th>Sr.</th><th>Item Code</th><th>Qty</th><th>Unit</th><th>Particulars</th><th>Type</th><th>Brand</th><th>Model</th><th>Size</th><th class="num">Rate</th><th class="num">Disc.%</th><th class="num">Amount</th><th class="num">GST%</th></tr></thead><tbody>`;
+   if(!arr.length)html+='<tr><td colspan="13" class="empty">No products added yet — add products from the catalogue.</td></tr>';
+   arr.forEach(i=>{const gross=num(i.qty)*num(i.rate),net=itemNet(i),disc=gross-net;basic+=net;gst+=itemGST(i);discountTotal+=disc;html+=`<tr><td>${items.indexOf(i)+1}</td><td>${esc(i.code)}</td><td>${num(i.qty)}</td><td>${esc(i.unit)}</td><td><b>${esc(i.name)}</b></td><td>${esc(i.type)}</td><td>${esc(i.brand)}</td><td>${esc(i.model)}</td><td>${esc(i.size)}</td><td class="num">${money(i.rate)}</td><td class="num">${num(i.discount).toFixed(1)}%</td><td class="num">${money(net)}</td><td class="num">${num(i.gst)}%</td></tr>`});
+   html+="</tbody></table>";
+   if(currentFormat==="section"){const sb=arr.reduce((s,i)=>s+itemNet(i),0),sg=arr.reduce((s,i)=>s+itemGST(i),0);html+=`<table class="section-total"><tr><td>Section Basic</td><td class="num">${money(sb)}</td></tr><tr><td>Section GST</td><td class="num">${money(sg)}</td></tr><tr><td>Section Total</td><td class="num">${money(sb+sg)}</td></tr></table>`}
+ });
+ if(items.length===0)html='<div class="section-title">PRODUCTS</div><table class="items-table"><tbody><tr><td class="empty">No products yet. Use the catalogue to add items.</td></tr></tbody></table>';
+ document.getElementById("itemsPreview").innerHTML=html;
+ const globalPct=Math.min(100,Math.max(0,num(val("globalDiscount"))));const globalDisc=basic*globalPct/100;const taxable=Math.max(0,basic-globalDisc);const taxRatio=basic?gst/basic:0;const adjustedGST=gst*(1-globalPct/100);const total=taxable+adjustedGST;
+ document.getElementById("finalTotals").innerHTML=`<tr><td>Total Basic (after item discounts)</td><td class="num">${money(basic)}</td></tr><tr><td>Global Discount ${globalPct?`(${globalPct}%)`:""}</td><td class="num">− ${money(globalDisc)}</td></tr><tr><td>GST</td><td class="num">${money(adjustedGST)}</td></tr><tr><td>Grand Total</td><td class="num">${money(total)}</td></tr>`;
+ document.getElementById("termsPreview").textContent=val("terms")||"—";
+ document.getElementById("pageLabel").textContent=`Preview · ${items.length} item${items.length===1?"":"s"}`;
+}
+function quoteData(){return {quoteNo:val("quoteNo"),date:val("quoteDate"),expiry:val("expiryDate"),customer:val("customerName"),address:val("customerAddress"),items:items.map(i=>({...i})),format:currentFormat,total:items.reduce((s,i)=>s+itemNet(i)+itemGST(i),0),savedAt:new Date().toISOString()}}
+function saveQuote(){if(!val("customerName").trim()){toast("Please enter the customer name");return}const history=JSON.parse(localStorage.getItem("tbhs_quotes")||"[]");history.unshift(quoteData());localStorage.setItem("tbhs_quotes",JSON.stringify(history.slice(0,100)));toast("Test quote saved in this browser")}
+function showHistory(){const h=JSON.parse(localStorage.getItem("tbhs_quotes")||"[]");alert(h.length?`Saved test quotations (${h.length}):\\n\\n`+h.slice(0,15).map(q=>`${q.quoteNo} — ${q.customer} — ${money(q.total)} — ${q.date}`).join("\\n"):"No saved quotations in this browser yet. Use Save Test Quote first.")}
+function downloadFile(name,content,type){const blob=new Blob([content],{type});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
+function exportCSV(){const rows=[["Quotation No",val("quoteNo")],["Customer",val("customerName")],["Date",val("quoteDate")],[],["Section","Item Code","Product","Brand","Model","Qty","Unit","Rate","Discount %","GST %","Net Amount","GST Amount"]];items.forEach(i=>rows.push([i.section,i.code,i.name,i.brand,i.model,i.qty,i.unit,i.rate,i.discount,i.gst,itemNet(i),itemGST(i)]));downloadFile((val("quoteNo")||"quotation")+".csv","\\ufeff"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\\r\\n"),"text/csv;charset=utf-8")}
+function exportHistory(){const h=JSON.parse(localStorage.getItem("tbhs_quotes")||"[]");const rows=[["Quotation No","Customer","Date","Expiry","Total","Saved At"],...h.map(q=>[q.quoteNo,q.customer,q.date,q.expiry,q.total,q.savedAt])];downloadFile("tbhs-quotation-history.csv","\\ufeff"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\\r\\n"),"text/csv;charset=utf-8")}
+renderCatalogue();renderQuote();
+["quoteNo","quoteDate","expiryDate","preparedBy","customerName","customerAddress","customerGST","contactPerson","customerMobile","customerEmail","partnerName","bankName","bankBranch","bankAccount","bankIFSC","orderBy","specifications","terms"].forEach(id=>document.getElementById(id).addEventListener("input",renderQuote));
+</script>
+</body>
+</html>
