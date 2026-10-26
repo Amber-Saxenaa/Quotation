@@ -173,7 +173,14 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 
 @media(min-width:851px){.app{grid-template-columns:176px minmax(0,1fr);align-items:stretch}.app.editing{grid-template-columns:176px minmax(280px,360px) minmax(0,1fr)}.sidebar{grid-column:1;grid-row:1 / span 4;position:sticky;top:0;height:100vh;align-self:start}.landing,.nav-page{grid-column:2;grid-row:1}.editor{grid-column:2;grid-row:1}.workspace{grid-column:3;grid-row:1}.app.full-quote{display:block!important}.app.full-quote .sidebar{display:none!important}}
 
+
+.column-setting{display:grid;grid-template-columns:auto minmax(60px,1fr) auto auto;align-items:center;gap:5px;padding:5px 0;border-bottom:1px solid #f0e7e6}
+.column-move{display:flex;gap:2px}.column-check{display:flex;align-items:center;gap:4px;margin:0;font-size:10px}.column-check input{width:auto}
+.items-table{table-layout:auto}.items-table th{white-space:normal;overflow-wrap:anywhere}.items-table td{overflow-wrap:anywhere}
+@media print{.no-print{display:none!important}}
+
 </style>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body class="format-section">
 <div class="app" id="appRoot">
@@ -234,8 +241,6 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 
 
 
-  <section class="nav-page" id="navPage" style="display:none"><div class="nav-page-head"><div><h1 id="navPageTitle">Dashboard</h1><p id="navPageSubtitle"></p></div><button class="btn primary" onclick="showAppPage('Create Quotation')">+ New Quotation</button></div><div id="navPageContent"></div></section>
-
   <aside class="editor">
     <button class="btn back-btn" onclick="backToFormats()">← Back to formats</button><h1>Edit Quotation</h1><div class="sub">Test version · Local demo data</div>
     <div class="steps"><div class="step active">1 Details</div><div class="step active">2 Products</div><div class="step active">3 Preview</div></div>
@@ -278,7 +283,38 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 4. Quotation valid until the expiry date mentioned above.</textarea>
       <div class="actions"><button class="btn primary" onclick="renderQuote()">Update Preview</button><button class="btn" onclick="saveQuote()">Save Test Quote</button></div>
     </section>
-    <section class="panel" id="catalogPanel">
+    
+<section class="panel" id="dataToolsPanel">
+  <h3>CATALOGUE & PRICE-LIST IMPORT</h3>
+  <p class="mini-note">Import brand price lists into the central catalogue. Supported in this test build: CSV directly; XLSX/XLS via the SheetJS library when internet is available; PDF files are retained as source references and need review before product rows are added.</p>
+  <label>Import price list or catalogue</label>
+  <input id="catalogImportFile" type="file" accept=".csv,.xlsx,.xls,.pdf,.txt" multiple>
+  <div class="actions"><button class="btn primary" onclick="importCatalogueFiles()">Import selected files</button><button class="btn" onclick="downloadCatalogueCSV()">Export catalogue CSV</button></div>
+  <div class="mini-note" id="importStatus">No files imported in this session.</div>
+</section>
+<section class="panel" id="formulaRulesPanel">
+  <h3>FORMULA RULES</h3>
+  <p class="mini-note">Choose the calculation method per product or brand. Existing quotation lines keep their copied price and formula.</p>
+  <label>Default calculation method</label>
+  <select id="defaultFormulaRule" onchange="setDefaultFormulaRule(this.value)">
+    <option value="discount_gst">Rate × Qty − discount, then GST</option>
+    <option value="markup_gst">Purchase cost + markup, then GST</option>
+    <option value="fixed_net">Fixed net rate, then GST</option>
+  </select>
+  <div class="two">
+    <div><label>Default markup %</label><input id="defaultMarkup" type="number" min="0" step="0.1" value="20" onchange="applyFormulaSettings()"></div>
+    <div><label>Default GST %</label><input id="defaultGST" type="number" min="0" step="0.1" value="18" onchange="renderQuote()"></div>
+  </div>
+  <div class="mini-note">Per-product formula settings can be overridden in the product catalogue. Confirm tax treatment with your finance team before production use.</div>
+</section>
+<section class="panel" id="columnDesignerPanel">
+  <h3>COLUMN DESIGNER</h3>
+  <p class="mini-note">Reorder and control which columns appear in the customer-facing quotation. Internal fields are never printed.</p>
+  <div id="columnDesignerList"></div>
+  <div class="actions"><button class="btn small" onclick="addCustomColumn()">+ Add column</button><button class="btn small" onclick="resetColumns()">Reset columns</button></div>
+</section>
+
+<section class="panel" id="catalogPanel">
       <h3>PRODUCT CATALOGUE <span class="badge" id="catalogCount">8 demo items</span></h3>
       <input class="product-search" id="productSearch" placeholder="Search brand, code, model, product..." oninput="renderCatalogue()">
       <div id="catalogueList"></div>
@@ -296,7 +332,7 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
   <main class="workspace">
     <div class="topbar">
       <div><h1>Quotation Preview</h1><p>Live A4 preview · Edit details or add products on the left</p></div>
-      <div class="top-actions"><button class="btn" onclick="exportExcel()">⬇ Excel</button><button class="btn" onclick="exportPDF()">⬇ PDF</button><button class="btn" onclick="exportCSV()">⬇ CSV</button><button class="btn primary" id="fullPageCreateBtn" onclick="openFullPageQuote()">Create</button><button class="btn" onclick="showAppPage('Reports / Export')">History CSV</button><button class="btn primary" onclick="window.print()">Print</button></div>
+      <div class="top-actions"><button class="btn" onclick="exportCSV()">Export CSV</button><button class="btn primary" id="fullPageCreateBtn" onclick="openFullPageQuote()">Create</button><button class="btn" onclick="showAppPage('Reports / Export')">History CSV</button><button class="btn primary" onclick="window.print()">Print / Save PDF</button></div>
     </div>
     <div class="preview-wrap"><article class="paper" id="paper">
       <header class="paper-head">
@@ -319,9 +355,6 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
   </main>
 </div>
 <div class="toast" id="toast"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 <script>
 
 let landingFormat="section";
@@ -390,7 +423,7 @@ function dateISO(offset=0){let d=new Date();d.setDate(d.getDate()+offset);return
 document.getElementById("quoteDate").value=dateISO(0);document.getElementById("expiryDate").value=dateISO(14);
 function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.style.display="block";setTimeout(()=>el.style.display="none",2300)}
 function setFormat(format){currentFormat=format;document.body.className="format-"+format;["classic","section","premium"].forEach(f=>document.getElementById("design-"+f).classList.toggle("selected",f===format));document.getElementById("formatSelect").value=format;renderQuote()}
-function addProduct(p){items.push({id:Date.now()+Math.random(),section:p.category||"General",code:p.code||"",name:p.name||"New product",brand:p.brand||"",model:p.model||"",type:p.category||"",size:"",qty:1,unit:p.unit||"PCS",rate:num(p.rate),discount:0,gst:p.gst===undefined?num(val("defaultGST")):num(p.gst)});renderQuote();toast("Product added to quotation")}
+function addProduct(p){items.push({id:Date.now()+Math.random(),section:p.category||"General",code:p.code||"",name:p.name||"New product",brand:p.brand||"",model:p.model||"",type:p.category||"",size:"",qty:1,unit:p.unit||"PCS",rate:num(p.rate),purchaseCost:p.purchaseCost==null?null:num(p.purchaseCost),markup:num(p.markup||document.getElementById("defaultMarkup")?.value||20),formulaRule:p.formulaRule||defaultFormula,discount:0,gst:p.gst===undefined?num(val("defaultGST")):num(p.gst)});renderQuote();toast("Product added to quotation")}
 function renderCatalogue(){const q=val("productSearch").toLowerCase();const list=catalogue.filter(p=>[p.name,p.brand,p.code,p.model,p.category].join(" ").toLowerCase().includes(q));document.getElementById("catalogCount").textContent=catalogue.length+" items";document.getElementById("catalogueList").innerHTML=list.map(p=>`<div class="catalogue-item"><div><b>${esc(p.name)}</b><small>${esc(p.brand)} · ${esc(p.code)} · ${esc(p.category||"General")} · ${money(p.rate)}</small></div><button class="btn small" onclick="addFromCatalogue(${p.id})">+ Add</button></div>`).join("")||'<p class="mini-note">No matching products.</p>'}
 function addFromCatalogue(id){const p=catalogue.find(x=>x.id===id);if(p)addProduct(p)}
 function addCatalogueProduct(){const name=val("newName").trim();if(!name){toast("Enter a product name first");return}const p={id:Date.now(),name,brand:val("newBrand"),code:val("newCode"),model:val("newModel"),unit:val("newUnit")||"PCS",rate:num(val("newRate")),gst:num(val("newGST")),category:"General"};catalogue.push(p);localStorage.setItem("tbhs_catalogue",JSON.stringify(catalogue));["newName","newBrand","newCode","newModel"].forEach(id=>document.getElementById(id).value="");renderCatalogue();toast("Catalogue product saved in this browser")}
@@ -455,7 +488,7 @@ function renderManageQuotes(){
 }
 function quoteHistoryTable(q){return pageTable(["Quotation No.","Customer","Date","Expiry","Total","Actions"],q.map(x=>[`<b>${esc(x.quoteNo||"—")}</b>`,esc(x.customer||"—"),esc(x.date||"—"),esc(x.expiry||"—"),money(x.total),`<button onclick="reopenSavedQuote('${String(x.quoteNo||"").replace(/'/g,"")}')">Open</button>`]),"No saved quotations in this browser yet.")}
 function filterQuoteTable(){const q=readSavedQuotes(),term=(document.getElementById("quoteFilter")?.value||"").toLowerCase();document.getElementById("quoteHistoryTable").innerHTML=quoteHistoryTable(q.filter(x=>`${x.quoteNo} ${x.customer}`.toLowerCase().includes(term)))}
-function reopenSavedQuote(quoteNo){const q=readSavedQuotes().find(x=>x.quoteNo===quoteNo);if(!q){toast("Saved record not found");return}landingFormat=q.format||"section";startCreate();if(q.fields)Object.entries(q.fields).forEach(([k,v])=>{const el=document.getElementById(k);if(el)el.value=v});if(Array.isArray(q.items))items=q.items.map(i=>({...i}));if(q.globalDiscount!==undefined)document.getElementById("globalDiscount").value=q.globalDiscount;setFormat(q.format||"section");toast("Saved quotation loaded with all products")}
+function reopenSavedQuote(quoteNo){const q=readSavedQuotes().find(x=>x.quoteNo===quoteNo);if(!q){toast("Saved record not found");return}showAppPage("Create Quotation");if(q.customer)document.getElementById("customerName").value=q.customer;if(q.quoteNo)document.getElementById("quoteNo").value=q.quoteNo;renderQuote();toast("Loaded saved quotation details. Product rows are not restored in this demo yet.")}
 function renderCataloguePage(){
  const rows=catalogue.map(p=>[`<b>${esc(p.name)}</b>`,esc(p.brand||"—"),esc(p.code||"—"),esc(p.model||"—"),esc(p.category||"—"),money(p.rate),`<button onclick="addProductFromPage(${p.id})">Add to quotation</button>`]);
  return `<section class="page-panel"><h2>Product catalogue <span class="muted">${catalogue.length} demo products</span></h2><div class="page-toolbar"><input id="catalogPageSearch" placeholder="Search product, brand, code or model..." oninput="filterCataloguePage()"><button class="btn primary" onclick="document.getElementById('newProductForm').style.display='grid'">+ Add product</button></div><div id="catalogPageTable">${cataloguePageTable(rows)}</div><div id="newProductForm" class="page-form" style="display:none;margin-top:20px"><label>Product name<input id="pageNewName" placeholder="Product name"></label><label>Brand<input id="pageNewBrand" placeholder="Brand"></label><label>Item code<input id="pageNewCode" placeholder="Item code"></label><label>Model<input id="pageNewModel" placeholder="Model"></label><label>Category<input id="pageNewCategory" placeholder="e.g. Banquet"></label><label>Rate (₹)<input id="pageNewRate" type="number" value="0"></label><div class="wide"><button class="btn primary" onclick="saveCatalogueFromPage()">Save product</button></div></div></section>`;
@@ -472,13 +505,75 @@ function renderCustomersPage(){
 function openCustomerDraft(name){showAppPage("Create Quotation");document.getElementById("customerName").value=name;renderQuote();document.getElementById("customerName").focus()}
 function renderEmployeesPage(){return `<div class="page-grid"><div class="page-card"><div class="muted">WORKSPACE ACCESS</div><div class="metric">Local</div><div class="muted">This test app runs in one browser only.</div></div><div class="page-card"><div class="muted">EMPLOYEE RECORDS</div><div class="metric">3</div><div class="muted">Sample team entries</div></div><div class="page-card"><div class="muted">PERMISSIONS</div><div class="metric">Demo</div><div class="muted">No real sign-in or role enforcement yet.</div></div></div><section class="page-panel"><h2>Employee directory (sample)</h2>${pageTable(["Employee","Role","Access","Status"],[["Quotation Admin","Administrator","Settings, reports, quotations","Demo"],["Sales Executive","Quotation creator","Create and edit quotations","Demo"],["Catalogue Manager","Catalogue editor","Product catalogue","Demo"]])}<p class="muted">Employee accounts and shared access require a backend and authentication, which are not included in this standalone HTML test.</p></section>`}
 function renderReportsPage(){const q=readSavedQuotes(),total=q.reduce((a,x)=>a+num(x.total),0);return `<div class="page-grid"><div class="page-card"><div class="muted">QUOTATIONS SAVED</div><div class="metric">${q.length}</div></div><div class="page-card"><div class="muted">TOTAL VALUE</div><div class="metric">${money(total)}</div></div><div class="page-card"><div class="muted">AVERAGE QUOTATION</div><div class="metric">${money(q.length?total/q.length:0)}</div></div></div><section class="page-panel"><h2>Export reports</h2><p class="muted">Export saved quotation history from this browser as a CSV file for Excel.</p><div class="page-toolbar"><button class="btn primary" onclick="exportHistory()">Download quotation history CSV</button><button class="btn" onclick="showAppPage('Manage Quotations')">View quotation history</button></div></section>`}
-function getSettings(){try{return JSON.parse(localStorage.getItem("tbhs_settings")||"{}")}catch(e){return {}}}
-function renderSettingsPage(){const s=Object.assign({supplier:"The Big Hotel Store",website:"www.thebighotelstore.com",gst:18,validity:14,terms:"Prices and taxes are as mentioned above. Delivery timeline will be confirmed after order confirmation."},getSettings());return `<section class="page-panel"><h2>Quotation defaults</h2><p class="muted">Saved in this browser. New quotations use the default GST and validity.</p><div class="page-form"><label>Supplier name<input id="settingSupplier" value="${esc(s.supplier)}"></label><label>Website<input id="settingWebsite" value="${esc(s.website)}"></label><label>Default GST (%)<input id="settingGST" type="number" value="${esc(s.gst)}"></label><label>Default validity (days)<input id="settingValidity" type="number" value="${esc(s.validity)}"></label><label class="wide">Default terms<textarea id="settingTerms" rows="3">${esc(s.terms)}</textarea></label><div class="wide"><button class="btn primary" onclick="saveDemoSettings()">Save settings</button></div></div></section>`}
-function applySettings(){const s=getSettings();if(s.gst!==undefined)document.getElementById("defaultGST").value=s.gst;if(s.validity!==undefined)document.getElementById("expiryDate").value=dateISO(num(s.validity))}
+function renderSettingsPage(){return `<section class="page-panel"><h2>Quotation defaults</h2><p class="muted">These are local demo settings. They are not shared with other employees.</p><div class="page-form"><label>Supplier name<input id="settingSupplier" value="The Big Hotel Store"></label><label>Website<input id="settingWebsite" value="www.thebighotelstore.com"></label><label>Default GST (%)<input id="settingGST" type="number" value="18"></label><label>Default validity (days)<input id="settingValidity" type="number" value="14"></label><label class="wide">Default terms<textarea id="settingTerms" rows="3">Prices and taxes are as mentioned above. Delivery timeline will be confirmed after order confirmation.</textarea></label><div class="wide"><button class="btn primary" onclick="saveDemoSettings()">Save settings</button></div></div></section>`}
 function saveDemoSettings(){localStorage.setItem("tbhs_settings",JSON.stringify({supplier:document.getElementById("settingSupplier").value,website:document.getElementById("settingWebsite").value,gst:num(document.getElementById("settingGST").value),validity:num(document.getElementById("settingValidity").value),terms:document.getElementById("settingTerms").value}));toast("Demo settings saved in this browser")}
 
 function showNavNotice(section){showAppPage(section)}
 function enableCellEditing(){const table=document.getElementById("itemsPreview");table.ondblclick=function(e){const td=e.target.closest("td[data-field]");if(!td||td.isContentEditable)return;const tr=td.closest("tr"),item=items.find(x=>String(x.id)===tr.dataset.itemId);if(!item)return;const field=td.dataset.field,original=item[field];td.contentEditable="true";td.focus();const finish=()=>{td.contentEditable="false";let value=td.textContent.trim();if(["qty","rate","discount","gst"].includes(field)){value=Number(value.replace(/[₹,%\s,]/g,""));if(!Number.isFinite(value))value=original;item[field]=value}else item[field]=value;renderQuote()};td.onblur=finish;td.onkeydown=function(ev){if(ev.key==="Enter"){ev.preventDefault();td.blur()}if(ev.key==="Escape"){item[field]=original;renderQuote()}}}}
+
+
+const COLUMN_DEFAULTS = [
+ {key:"code",label:"Item Code",visible:true,internal:false},
+ {key:"qty",label:"Qty",visible:true,internal:false},
+ {key:"unit",label:"Unit",visible:true,internal:false},
+ {key:"name",label:"Particulars",visible:true,internal:false},
+ {key:"type",label:"Type",visible:true,internal:false},
+ {key:"brand",label:"Brand",visible:true,internal:false},
+ {key:"model",label:"Model",visible:true,internal:false},
+ {key:"size",label:"Size",visible:true,internal:false},
+ {key:"rate",label:"Rate",visible:true,internal:false},
+ {key:"discount",label:"Discount %",visible:true,internal:false},
+ {key:"amount",label:"Amount",visible:true,internal:false},
+ {key:"gst",label:"GST %",visible:true,internal:false},
+ {key:"purchaseCost",label:"Purchase Cost",visible:false,internal:true},
+ {key:"margin",label:"Margin %",visible:false,internal:true}
+];
+let quoteColumns = JSON.parse(localStorage.getItem("tbhs_quote_columns") || "null") || COLUMN_DEFAULTS.map(x=>({...x}));
+let defaultFormula = localStorage.getItem("tbhs_default_formula") || "discount_gst";
+let importSources = JSON.parse(localStorage.getItem("tbhs_import_sources") || "[]");
+
+function persistColumns(){localStorage.setItem("tbhs_quote_columns",JSON.stringify(quoteColumns));renderColumnDesigner();renderQuote()}
+function renderColumnDesigner(){
+ const root=document.getElementById("columnDesignerList");if(!root)return;
+ root.innerHTML=quoteColumns.map((c,i)=>`<div class="column-setting"><span class="column-move"><button class="btn small" onclick="moveColumn(${i},-1)" ${i===0?"disabled":""}>↑</button><button class="btn small" onclick="moveColumn(${i},1)" ${i===quoteColumns.length-1?"disabled":""}>↓</button></span><input aria-label="Column label" value="${esc(c.label)}" onchange="renameColumn('${c.key}',this.value)"><label class="column-check"><input type="checkbox" ${c.visible?"checked":""} onchange="toggleColumn('${c.key}',this.checked)" ${c.internal?'disabled title="Internal fields are always excluded from customer PDFs"':""}> PDF</label>${c.key.startsWith("custom_")?`<button class="btn small" onclick="removeCustomColumn('${c.key}')">−</button>`:""}</div>`).join("");
+}
+function moveColumn(i,dir){const j=i+dir;if(j<0||j>=quoteColumns.length)return;[quoteColumns[i],quoteColumns[j]]=[quoteColumns[j],quoteColumns[i]];persistColumns()}
+function renameColumn(key,label){const c=quoteColumns.find(x=>x.key===key);if(c){c.label=label.trim()||c.label;persistColumns()}}
+function toggleColumn(key,visible){const c=quoteColumns.find(x=>x.key===key);if(c&&!c.internal){c.visible=visible;persistColumns()}}
+function addCustomColumn(){const key="custom_"+Date.now();const label=prompt("New column name (e.g. Finish, HSN, Lead Time):","Custom field");if(!label)return;quoteColumns.push({key,label:label.trim(),visible:true,internal:false});items.forEach(i=>i[key]=i[key]||"");persistColumns();toast("Column added. It will appear in the quotation table.")}
+function removeCustomColumn(key){quoteColumns=quoteColumns.filter(c=>c.key!==key);items.forEach(i=>delete i[key]);persistColumns()}
+function resetColumns(){if(!confirm("Reset customer-facing columns to defaults?"))return;quoteColumns=COLUMN_DEFAULTS.map(x=>({...x}));persistColumns()}
+function setDefaultFormulaRule(rule){defaultFormula=rule;localStorage.setItem("tbhs_default_formula",rule);applyFormulaSettings()}
+function applyFormulaSettings(){const rule=document.getElementById("defaultFormulaRule")?.value||defaultFormula;defaultFormula=rule;localStorage.setItem("tbhs_default_formula",rule);const markup=num(document.getElementById("defaultMarkup")?.value||20);items.forEach(i=>{if(!i.formulaRule)i.formulaRule=rule;if(i.formulaRule==="markup_gst"&&i.purchaseCost!=null){i.rate=num(i.purchaseCost)*(1+markup/100);i.markup=markup}});renderQuote()}
+function productNetRate(i){const rule=i.formulaRule||defaultFormula;if(rule==="markup_gst"&&i.purchaseCost!=null){const markup=num(i.markup ?? document.getElementById("defaultMarkup")?.value ?? 20);return num(i.purchaseCost)*(1+markup/100)}return num(i.rate)}
+function importCatalogueFiles(){
+ const input=document.getElementById("catalogImportFile"),files=[...(input.files||[])];if(!files.length){toast("Choose one or more files first");return}
+ let done=0,notes=[];
+ const finish=()=>{localStorage.setItem("tbhs_catalogue",JSON.stringify(catalogue));localStorage.setItem("tbhs_import_sources",JSON.stringify(importSources));renderCatalogue();renderCataloguePage?.();document.getElementById("importStatus").textContent=notes.join(" · ");toast("Import processed. Review matches and prices before use.")};
+ files.forEach(file=>{
+  const ext=file.name.split(".").pop().toLowerCase();importSources.push({name:file.name,type:ext,importedAt:new Date().toISOString(),status:"Imported for review"});
+  if(ext==="csv"||ext==="txt"){
+   const reader=new FileReader();reader.onload=()=>{const rows=parseCSV(String(reader.result||""));const count=mergeImportedRows(rows,file.name);notes.push(`${file.name}: ${count} products processed`);if(++done===files.length)finish()};reader.onerror=()=>{notes.push(`${file.name}: failed to read`);if(++done===files.length)finish()};reader.readAsText(file);
+  }else if(ext==="xlsx"||ext==="xls"){
+   if(window.XLSX){const reader=new FileReader();reader.onload=()=>{try{const wb=XLSX.read(reader.result,{type:"array"});let count=0;wb.SheetNames.forEach(n=>count+=mergeImportedRows(XLSX.utils.sheet_to_json(wb.Sheets[n],{defval:""}),file.name+" / "+n));notes.push(`${file.name}: ${count} products processed`)}catch(e){notes.push(`${file.name}: could not parse workbook`)}if(++done===files.length)finish()};reader.readAsArrayBuffer(file)}
+   else {notes.push(`${file.name}: XLSX support requires internet (SheetJS). File listed for review`);if(++done===files.length)finish()}
+  }else{notes.push(`${file.name}: source recorded; PDF/catalogue extraction needs review before product import`);if(++done===files.length)finish()}
+ });
+}
+function parseCSV(text){const lines=text.replace(/^\uFEFF/,"").split(/\r?\n/).filter(x=>x.trim());if(!lines.length)return[];const parseLine=line=>{let out=[],cur="",q=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'&&line[i+1]==='"'&&q){cur+='"';i++}else if(c==='"')q=!q;else if(c===","&&!q){out.push(cur.trim());cur=""}else cur+=c}out.push(cur.trim());return out};const headers=parseLine(lines.shift());return lines.map(line=>Object.fromEntries(parseLine(line).map((v,i)=>[headers[i]||"Column "+(i+1),v])))}
+function normalizeHeader(s){return String(s||"").toLowerCase().replace(/[^a-z0-9]/g,"")}
+function findField(row,aliases){const keys=Object.keys(row);const key=keys.find(k=>aliases.includes(normalizeHeader(k)));return key?row[key]:""}
+function mergeImportedRows(rows,source){
+ let count=0;rows.forEach(row=>{if(!row||typeof row!=="object")return;const name=String(findField(row,["product","productname","item","itemname","description","particulars","name"])).trim();if(!name)return;
+ const brand=String(findField(row,["brand","manufacturer","make"])).trim(),code=String(findField(row,["itemcode","code","sku","productcode","itemno","articleno"])).trim(),model=String(findField(row,["model","modelno","modelnumber"])).trim(),rate=parseFloat(String(findField(row,["rate","price","listprice","sellingprice","unitprice","basicrate"])).replace(/[₹,\s]/g,""))||0,gst=parseFloat(String(findField(row,["gst","gstpercent","tax","taxpercent","gstpercentage"])).replace("%",""))||18,unit=String(findField(row,["unit","uom","uofm"])).trim()||"PCS",category=String(findField(row,["category","type","section","group"])).trim()||"General";
+ const match=catalogue.find(p=>String(p.brand||"").toLowerCase()===brand.toLowerCase()&&code&&String(p.code||"").toLowerCase()===code.toLowerCase());
+ const record={id:match?match.id:Date.now()+Math.random(),name,brand,code,model,rate,gst,unit,category,sourceFile:source,priceUpdatedAt:new Date().toISOString(),formulaRule:String(findField(row,["formularule","calculationmethod"])).trim()||defaultFormula};
+ if(match){Object.assign(match,record)}else catalogue.push(record);count++;
+ });return count;
+}
+function downloadCatalogueCSV(){const cols=["name","brand","code","model","category","unit","rate","gst","formulaRule","sourceFile","priceUpdatedAt"];const rows=[cols,...catalogue.map(p=>cols.map(c=>p[c]??""))];downloadFile("tbhs-central-catalogue.csv","\\ufeff"+rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\\r\\n"),"text/csv;charset=utf-8")}
+function visibleColumns(){return quoteColumns.filter(c=>c.visible&&!c.internal)}
+function colValue(i,key){if(key==="amount")return money(itemNet(i));if(key==="rate")return money(productNetRate(i));if(key==="discount")return num(i.discount).toFixed(1)+"%";if(key==="gst")return num(i.gst)+"%";if(key==="purchaseCost"||key==="margin")return "INTERNAL";return i[key]??""}
 
 function renderQuote(){
  const meta=document.getElementById("metaPreview");meta.innerHTML=`<div><b>Quotation No.</b><span>${esc(val("quoteNo"))}</span></div><div><b>Date</b><span>${esc(val("quoteDate"))}</span></div><div><b>Expiry Date</b><span>${esc(val("expiryDate"))}</span></div>`;
@@ -487,9 +582,9 @@ function renderQuote(){
  document.getElementById("specPreview").textContent=val("specifications")||"—";
  const groups=groupedItems();let html="",basic=0,gst=0,discountTotal=0;
  Object.entries(groups).forEach(([section,arr],gi)=>{
-   html+=`<div class="section-title">${currentFormat==="classic"?"":`${gi+1}. `}${esc(section.toUpperCase())}</div><table class="items-table"><thead><tr><th>Sr.</th><th>Item Code</th><th>Qty</th><th>Unit</th><th>Particulars</th><th>Type</th><th>Brand</th><th>Model</th><th>Size</th><th class="num">Rate</th><th class="num">Disc.%</th><th class="num">Amount</th><th class="num">GST%</th><th>+/−</th></tr></thead><tbody>`;
-   if(!arr.length)html+='<tr><td colspan="14" class="empty">No products added yet — add products from the catalogue.</td></tr>';
-   arr.forEach(i=>{const gross=num(i.qty)*num(i.rate),net=itemNet(i),disc=gross-net;basic+=net;gst+=itemGST(i);discountTotal+=disc;html+=`<tr data-item-id="${i.id}"><td>${items.indexOf(i)+1}</td><td data-field="code">${esc(i.code)}</td><td data-field="qty">${num(i.qty)}</td><td data-field="unit">${esc(i.unit)}</td><td data-field="name">${esc(i.name)}</td><td data-field="type">${esc(i.type)}</td><td data-field="brand">${esc(i.brand)}</td><td data-field="model">${esc(i.model)}</td><td data-field="size">${esc(i.size)}</td><td data-field="rate" class="num">${money(i.rate)}</td><td data-field="discount" class="num">${num(i.discount).toFixed(1)}%</td><td class="num">${money(net)}</td><td data-field="gst" class="num">${num(i.gst)}%</td><td class="editor-table-actions"><button class="cell-btn" title="Add line below" onclick="addLineBelow(${i.id})">+</button><button class="cell-btn" title="Remove line" onclick="removeLine(${i.id})">−</button></td></tr>`});
+   const cols=visibleColumns();html+=`<div class="section-title">${currentFormat==="classic"?"":`${gi+1}. `}${esc(section.toUpperCase())}</div><table class="items-table"><thead><tr><th>Sr.</th>${cols.map(c=>`<th>${esc(c.label)}</th>`).join("")}<th class="no-print">+/−</th></tr></thead><tbody>`;
+   if(!arr.length)html+='<tr><td colspan="${visibleColumns().length+2}" class="empty">No products added yet — add products from the catalogue.</td></tr>';
+   arr.forEach(i=>{const gross=num(i.qty)*productNetRate(i),net=itemNet(i),disc=gross-net;basic+=net;gst+=itemGST(i);discountTotal+=disc;html+=`<tr data-item-id="${i.id}"><td>${items.indexOf(i)+1}</td>${cols.map(c=>`<td data-field="${esc(c.key)}" class="${["qty","rate","discount","amount","gst","purchaseCost","margin"].includes(c.key)?"num":""}">${esc(colValue(i,c.key))}</td>`).join("")}<td class="editor-table-actions no-print"><button class="cell-btn" title="Add line below" onclick="addLineBelow(${i.id})">+</button><button class="cell-btn" title="Remove line" onclick="removeLine(${i.id})">−</button></td></tr>`});
    html+="</tbody></table>";
    if(currentFormat==="section"){const sb=arr.reduce((s,i)=>s+itemNet(i),0),sg=arr.reduce((s,i)=>s+itemGST(i),0);html+=`<table class="section-total"><tr><td>Section Basic</td><td class="num">${money(sb)}</td></tr><tr><td>Section GST</td><td class="num">${money(sg)}</td></tr><tr><td>Section Total</td><td class="num">${money(sb+sg)}</td></tr></table>`}
  });
@@ -500,37 +595,13 @@ function renderQuote(){
  document.getElementById("termsPreview").textContent=val("terms")||"—";
  document.getElementById("pageLabel").textContent=`Preview · ${items.length} item${items.length===1?"":"s"}`;enableCellEditing();
 }
-const FIELD_IDS=["quoteNo","quoteDate","expiryDate","preparedBy","customerName","customerAddress","customerGST","contactPerson","customerMobile","customerEmail","partnerName","bankName","bankBranch","bankAccount","bankIFSC","orderBy","specifications","terms"];
-function computeTotals(){let basic=0,gst=0;items.forEach(i=>{basic+=itemNet(i);gst+=itemGST(i)});const pct=Math.min(100,Math.max(0,num(val("globalDiscount")))),disc=basic*pct/100,g=gst*(1-pct/100);return{basic,disc,pct,gst:g,total:basic-disc+g}}
-function quoteData(){const f={};FIELD_IDS.forEach(id=>f[id]=val(id));return {quoteNo:val("quoteNo"),date:val("quoteDate"),expiry:val("expiryDate"),customer:val("customerName"),address:val("customerAddress"),fields:f,globalDiscount:val("globalDiscount"),items:items.map(i=>({...i})),format:currentFormat,total:computeTotals().total,savedAt:new Date().toISOString()}}
-function saveQuote(){if(!val("customerName").trim()){toast("Please enter the customer name");return}const q=quoteData();let h=readSavedQuotes().filter(x=>x.quoteNo!==q.quoteNo);h.unshift(q);localStorage.setItem("tbhs_quotes",JSON.stringify(h.slice(0,200)));toast("Quotation saved in this browser")}
-function showHistory(){const h=JSON.parse(localStorage.getItem("tbhs_quotes")||"[]");alert(h.length?`Saved test quotations (${h.length}):\n\n`+h.slice(0,15).map(q=>`${q.quoteNo} — ${q.customer} — ${money(q.total)} — ${q.date}`).join("\n"):"No saved quotations in this browser yet. Use Save Test Quote first.")}
+function quoteData(){return {quoteNo:val("quoteNo"),date:val("quoteDate"),expiry:val("expiryDate"),customer:val("customerName"),address:val("customerAddress"),items:items.map(i=>({...i})),format:currentFormat,total:items.reduce((s,i)=>s+itemNet(i)+itemGST(i),0),savedAt:new Date().toISOString()}}
+function saveQuote(){if(!val("customerName").trim()){toast("Please enter the customer name");return}const history=JSON.parse(localStorage.getItem("tbhs_quotes")||"[]");history.unshift(quoteData());localStorage.setItem("tbhs_quotes",JSON.stringify(history.slice(0,100)));toast("Test quote saved in this browser")}
+function showHistory(){const h=JSON.parse(localStorage.getItem("tbhs_quotes")||"[]");alert(h.length?`Saved test quotations (${h.length}):\\n\\n`+h.slice(0,15).map(q=>`${q.quoteNo} — ${q.customer} — ${money(q.total)} — ${q.date}`).join("\\n"):"No saved quotations in this browser yet. Use Save Test Quote first.")}
 function downloadFile(name,content,type){const blob=new Blob([content],{type});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href)}
-function exportCSV(){const t=computeTotals();const rows=[["Quotation No",val("quoteNo")],["Customer",val("customerName")],["Date",val("quoteDate")],["Expiry",val("expiryDate")],[],["Section","Item Code","Product","Brand","Model","Size","Qty","Unit","Rate","Discount %","GST %","Net Amount","GST Amount"]];items.forEach(i=>rows.push([i.section,i.code,i.name,i.brand,i.model,i.size,i.qty,i.unit,i.rate,i.discount,i.gst,itemNet(i).toFixed(2),itemGST(i).toFixed(2)]));rows.push([],["Total Basic",t.basic.toFixed(2)],["Global Discount ("+t.pct+"%)",t.disc.toFixed(2)],["GST",t.gst.toFixed(2)],["Grand Total",t.total.toFixed(2)]);downloadFile((val("quoteNo")||"quotation")+".csv","\ufeff"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n"),"text/csv;charset=utf-8")}
-function exportExcel(){if(typeof XLSX==="undefined"){toast("Excel library could not load — check internet connection");return}const t=computeTotals();
- const rows=[["THE BIG HOTEL STORE — QUOTATION"],[],["Quotation No",val("quoteNo"),"","Date",val("quoteDate")],["Customer",val("customerName"),"","Expiry",val("expiryDate")],["Address",val("customerAddress"),"","GSTIN",val("customerGST")],["Contact",val("contactPerson")+" "+val("customerMobile"),"","Prepared By",val("preparedBy")],[],["Sr","Section","Item Code","Particulars","Brand","Model","Size","Qty","Unit","Rate","Disc %","Net Amount","GST %","GST Amount","Line Total"]];
- items.forEach((i,n)=>rows.push([n+1,i.section,i.code,i.name,i.brand,i.model,i.size,num(i.qty),i.unit,num(i.rate),num(i.discount),+itemNet(i).toFixed(2),num(i.gst),+itemGST(i).toFixed(2),+(itemNet(i)+itemGST(i)).toFixed(2)]));
- const L=(a,b)=>{const r=Array(15).fill("");r[10]=a;r[11]=+b.toFixed(2);rows.push(r)};rows.push([]);L("Total Basic",t.basic);L("Global Discount "+t.pct+"%",-t.disc);L("GST",t.gst);L("GRAND TOTAL",t.total);rows.push([],["Terms & Conditions"],[val("terms")]);
- const ws=XLSX.utils.aoa_to_sheet(rows);ws["!cols"]=[5,14,11,32,14,12,10,6,7,11,8,13,7,12,13].map(w=>({wch:w}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Quotation");XLSX.writeFile(wb,(val("quoteNo")||"quotation")+".xlsx")}
-function exportPDF(){if(!window.jspdf){toast("PDF library could not load — check internet connection");return}const {jsPDF}=window.jspdf,doc=new jsPDF({unit:"mm",format:"a4"}),W=doc.internal.pageSize.getWidth(),t=computeTotals();
- const rs=n=>"Rs. "+(Number(n)||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
- doc.setFillColor(100,29,37);doc.rect(0,0,W,24,"F");doc.setTextColor(255);doc.setFont("helvetica","bold");doc.setFontSize(16);doc.text("THE BIG HOTEL STORE",14,12);doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text("HOTELWARE - KITCHEN EQUIPMENT - HOSPITALITY SOLUTIONS",14,18);
- doc.setTextColor(143,39,51);doc.setFont("helvetica","bold");doc.setFontSize(20);doc.text("QUOTATION",14,36);
- doc.setTextColor(48,40,42);doc.setFontSize(9);doc.setFont("helvetica","normal");
- doc.text(["Quotation No: "+val("quoteNo"),"Date: "+val("quoteDate"),"Valid Until: "+val("expiryDate")],W-14,31,{align:"right"});
- doc.setFont("helvetica","bold");doc.text("BILL TO",14,46);doc.setFont("helvetica","normal");
- doc.text(doc.splitTextToSize([val("customerName"),val("customerAddress"),"GSTIN: "+(val("customerGST")||"-"),"Contact: "+(val("contactPerson")||"-")+" "+val("customerMobile"),"Email: "+(val("customerEmail")||"-")].join("\n"),90),14,51);
- doc.setFont("helvetica","bold");doc.text("PREPARED BY / PARTNER",110,46);doc.setFont("helvetica","normal");
- doc.text(doc.splitTextToSize([val("partnerName"),"Bank: "+(val("bankName")||"-")+" "+val("bankBranch"),"A/C: "+(val("bankAccount")||"-")+"  IFSC: "+(val("bankIFSC")||"-"),"Order By: "+(val("orderBy")||"-"),"Prepared By: "+(val("preparedBy")||"-")].join("\n"),90),110,51);
- let y=82;const spec=val("specifications");if(spec){doc.setFont("helvetica","bold");doc.text("Specifications",14,y);doc.setFont("helvetica","normal");const l=doc.splitTextToSize(spec,182);doc.text(l,14,y+5);y+=8+l.length*4.2}
- const body=[];let n=0;Object.entries(groupedItems()).forEach(([sec,arr])=>{if(currentFormat!=="classic")body.push([{content:sec.toUpperCase(),colSpan:10,styles:{fillColor:[240,227,226],textColor:[100,29,37],fontStyle:"bold"}}]);arr.forEach(i=>body.push([++n,i.code,i.name+(i.size?" ("+i.size+")":""),(i.brand+" "+i.model).trim(),num(i.qty),i.unit,rs(i.rate).replace("Rs. ",""),num(i.discount)+"%",num(i.gst)+"%",rs(itemNet(i)).replace("Rs. ","")]))});
- doc.autoTable({startY:y,head:[["Sr","Code","Particulars","Brand/Model","Qty","Unit","Rate","Disc","GST","Amount"]],body,theme:"grid",styles:{fontSize:7.5,cellPadding:1.8},headStyles:{fillColor:[139,41,51]},columnStyles:{6:{halign:"right"},9:{halign:"right"}},margin:{left:14,right:14}});
- doc.autoTable({startY:doc.lastAutoTable.finalY+6,body:[["Total Basic",rs(t.basic)],["Global Discount ("+t.pct+"%)","- "+rs(t.disc)],["GST",rs(t.gst)],["GRAND TOTAL",rs(t.total)]],theme:"grid",styles:{fontSize:9},columnStyles:{1:{halign:"right"}},tableWidth:90,margin:{left:W-104},didParseCell:d=>{if(d.row.index===3){d.cell.styles.fillColor=[100,29,37];d.cell.styles.textColor=255;d.cell.styles.fontStyle="bold"}}});
- let ty=doc.lastAutoTable.finalY+10;if(ty>255){doc.addPage();ty=20}doc.setFont("helvetica","bold");doc.setFontSize(9);doc.text("TERMS & CONDITIONS",14,ty);doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text(doc.splitTextToSize(val("terms"),182),14,ty+5);
- const pages=doc.getNumberOfPages();for(let p=1;p<=pages;p++){doc.setPage(p);doc.setFontSize(7);doc.setTextColor(120);doc.text("www.thebighotelstore.com",14,290);doc.text("Page "+p+" of "+pages,W-14,290,{align:"right"})}
- doc.save((val("quoteNo")||"quotation")+".pdf")}
-function exportHistory(){const h=JSON.parse(localStorage.getItem("tbhs_quotes")||"[]");const rows=[["Quotation No","Customer","Date","Expiry","Total","Saved At"],...h.map(q=>[q.quoteNo,q.customer,q.date,q.expiry,q.total,q.savedAt])];downloadFile("tbhs-quotation-history.csv","\ufeff"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n"),"text/csv;charset=utf-8")}
-applySettings();renderCatalogue();renderQuote();
+function exportCSV(){const rows=[["Quotation No",val("quoteNo")],["Customer",val("customerName")],["Date",val("quoteDate")],[],["Section","Item Code","Product","Brand","Model","Qty","Unit","Rate","Discount %","GST %","Net Amount","GST Amount"]];items.forEach(i=>rows.push([i.section,i.code,i.name,i.brand,i.model,i.qty,i.unit,i.rate,i.discount,i.gst,itemNet(i),itemGST(i)]));downloadFile((val("quoteNo")||"quotation")+".csv","\\ufeff"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\\r\\n"),"text/csv;charset=utf-8")}
+function exportHistory(){const h=JSON.parse(localStorage.getItem("tbhs_quotes")||"[]");const rows=[["Quotation No","Customer","Date","Expiry","Total","Saved At"],...h.map(q=>[q.quoteNo,q.customer,q.date,q.expiry,q.total,q.savedAt])];downloadFile("tbhs-quotation-history.csv","\\ufeff"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\\r\\n"),"text/csv;charset=utf-8")}
+renderCatalogue();renderColumnDesigner();renderQuote();
 ["quoteNo","quoteDate","expiryDate","preparedBy","customerName","customerAddress","customerGST","contactPerson","customerMobile","customerEmail","partnerName","bankName","bankBranch","bankAccount","bankIFSC","orderBy","specifications","terms"].forEach(id=>document.getElementById(id).addEventListener("input",renderQuote));
 </script>
 </body>
