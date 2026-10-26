@@ -50,7 +50,7 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 @media print{body{background:#fff}.sidebar,.editor,.topbar,.design-picker,.no-print{display:none!important}.app{display:block}.workspace{padding:0;overflow:visible}.preview-wrap{padding:0;display:block}.paper{width:100%;min-height:0;border:0;box-shadow:none;padding:12mm 10mm 18mm;margin:0;page-break-after:always}.paper:last-child{page-break-after:auto}.paper-foot{position:fixed;bottom:5mm;left:10mm;right:10mm}.section-title{break-after:avoid}.items-table tr{break-inside:avoid} @page{size:A4;margin:0}}
 
 .landing{grid-column:2;min-height:100vh;background:radial-gradient(circle at 80% 0%,#f4dddd 0,transparent 34%),#fbf7f6;padding:clamp(22px,5vw,64px)}
-.landing-inner{max-width:1080px;margin:auto}.landing-brand{display:flex;align-items:center;gap:14px;margin-bottom:46px}
+.landing-inner{max-width:1200px;margin:auto}.landing-brand{display:flex;align-items:center;gap:14px;margin-bottom:46px}
 .landing-logo{font:42px Georgia,serif;color:var(--maroon);letter-spacing:-4px;border-right:1px solid var(--line);padding-right:15px}
 .landing-brand strong{display:block;font-size:17px;letter-spacing:.7px;color:var(--maroon)}.landing-brand small{display:block;font-size:10px;letter-spacing:1.7px;color:var(--muted);margin-top:4px}
 .landing-eyebrow{color:var(--red);font-size:11px;letter-spacing:2px;font-weight:800;text-transform:uppercase;margin-bottom:10px}
@@ -74,7 +74,7 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 
 
 .landing{grid-column:2;min-height:100vh;background:radial-gradient(circle at 80% 0%,#f4dddd 0,transparent 34%),#fbf7f6;padding:clamp(22px,5vw,64px)}
-.landing-inner{max-width:1080px;margin:auto}.landing-brand{display:flex;align-items:center;gap:14px;margin-bottom:46px}
+.landing-inner{max-width:1200px;margin:auto}.landing-brand{display:flex;align-items:center;gap:14px;margin-bottom:46px}
 .landing-logo{font:42px Georgia,serif;color:var(--maroon);letter-spacing:-4px;border-right:1px solid var(--line);padding-right:15px}
 .landing-brand strong{display:block;font-size:17px;letter-spacing:.7px;color:var(--maroon)}.landing-brand small{display:block;font-size:10px;letter-spacing:1.7px;color:var(--muted);margin-top:4px}
 .landing-eyebrow{color:var(--red);font-size:11px;letter-spacing:2px;font-weight:800;text-transform:uppercase;margin-bottom:10px}
@@ -92,14 +92,18 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 .landing-bottom{display:flex;justify-content:space-between;align-items:center;gap:20px;border-top:1px solid var(--line);padding-top:22px;margin-top:24px}
 .landing-note{font-size:12px;color:var(--muted);max-width:500px}.create-btn{background:var(--maroon);color:white;border:0;border-radius:9px;padding:14px 25px;font-weight:750;min-width:200px}
 .back-btn{margin-bottom:14px}
-.selected-preview{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;grid-template-columns:minmax(170px,260px) 1fr;gap:22px;align-items:center;margin:10px 0 24px;box-shadow:0 5px 18px #521b2008}
-.selected-preview .preview-paper{background:#fffdfc;border:1px solid #e5d8d7;box-shadow:0 4px 14px #521b2010;padding:13px;min-height:190px}
-.selected-preview .preview-top{height:24px;border-bottom:5px solid var(--maroon);font:12px Georgia,serif;color:var(--maroon);display:flex;justify-content:space-between}
-.selected-preview .preview-top:after{content:'QUOTATION';font:800 8px Arial;color:var(--red)}
-.selected-preview .preview-block{height:22px;background:#f6e9e8;margin:9px 0;border-radius:3px}.selected-preview .preview-table-head{height:17px;background:var(--maroon);margin-top:10px}.selected-preview .preview-row{height:17px;border-bottom:1px solid #eadfdd}
+.selected-preview{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px;display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:32px;align-items:center;margin:14px 0 28px;box-shadow:0 8px 28px #521b2010;min-height:350px}
+.selected-preview > div:last-child{padding:12px 10px}
+.selected-preview h2{font-size:26px;margin:8px 0 12px;color:var(--maroon)}
+.selected-preview p{font-size:15px;line-height:1.7;color:var(--muted);max-width:540px;margin-bottom:18px}
+.selected-preview .feature-pills span{font-size:12px;padding:7px 11px}
+.selected-preview .preview-paper{background:#fffdfc;border:1px solid #e5d8d7;box-shadow:0 6px 20px #521b2012;padding:22px;min-height:300px;width:100%;display:flex;flex-direction:column}
+.selected-preview .preview-top{height:38px;border-bottom:6px solid var(--maroon);font:22px Georgia,serif;color:var(--maroon);display:flex;justify-content:space-between;padding-bottom:8px}
+.selected-preview .preview-top:after{content:'QUOTATION';font:800 10px Arial;color:var(--red);align-self:center}
+.selected-preview .preview-block{height:28px;background:#f6e9e8;margin:13px 0;border-radius:3px}.selected-preview .preview-table-head{height:24px;background:var(--maroon);margin-top:14px}.selected-preview .preview-row{height:24px;border-bottom:1px solid #eadfdd}
 .editor-table-actions{white-space:nowrap;text-align:center}.cell-btn{border:0;background:#f4e5e5;color:var(--maroon);font-weight:800;border-radius:50%;width:19px;height:19px;line-height:18px;padding:0;margin:1px}.cell-btn:hover{background:var(--red);color:#fff}
 .items-table td[contenteditable="true"]{outline:2px solid #b85b64;background:#fff7d9;min-width:35px}
-@media(max-width:800px){.format-cards{grid-template-columns:1fr}.landing-bottom{align-items:stretch;flex-direction:column}.create-btn{width:100%}.selected-preview{grid-template-columns:1fr}}
+@media(max-width:800px){.format-cards{grid-template-columns:1fr}.landing-bottom{align-items:stretch;flex-direction:column}.create-btn{width:100%}.selected-preview{grid-template-columns:1fr;padding:16px;gap:18px}.selected-preview .preview-paper{max-width:440px;min-height:250px}.selected-preview h2{font-size:22px}}
 @media(max-width:850px){.app{display:block}.sidebar{position:relative;min-height:0;height:auto;display:flex;padding:10px;gap:8px}.brand{display:none}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;padding:9px}.nav .navtext{display:inline}.nav span{width:auto}.sidefoot{display:none}.landing{padding:20px}.app.editing{display:block}.editor{max-height:none;border-right:0}.workspace{padding:12px}}
 
 
@@ -123,6 +127,22 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 <body class="format-section">
 <div class="app" id="appRoot">
 
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">TBHS</div><small>THE BIG HOTEL STORE</small></div>
+    <nav class="nav">
+      <button onclick="showNavNotice('Dashboard')"><span>⌂</span><span class="navtext">Dashboard</span></button>
+      <button class="active" onclick="backToFormats()"><span>▤</span><span class="navtext">Create Quotation</span></button>
+      <button onclick="showHistory()"><span>◷</span><span class="navtext">Manage Quotations</span></button>
+      <button onclick="document.getElementById('catalogPanel').scrollIntoView({behavior:'smooth'})"><span>▦</span><span class="navtext">Product Catalogue</span></button>
+      <button onclick="document.getElementById('customerName').focus()"><span>♙</span><span class="navtext">Customers</span></button>
+      <button onclick="showNavNotice('Employees')"><span>♧</span><span class="navtext">Employees</span></button>
+      <button onclick="exportHistory()"><span>▤</span><span class="navtext">Reports / Export</span></button>
+      <button onclick="showNavNotice('Settings')"><span>⚙</span><span class="navtext">Settings</span></button>
+    </nav>
+    <div class="sidefoot">Your Partner in Hospitality Excellence</div>
+  </aside>
+
+
 <section class="landing" id="landingPage">
  <div class="landing-inner">
   <div class="landing-brand"><div class="landing-logo">TBHS</div><div><strong>THE BIG HOTEL STORE</strong><small>HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS</small></div></div>
@@ -138,20 +158,7 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
  </div>
 </section>
 
-  <aside class="sidebar">
-    <div class="brand"><div class="brand-mark">TBHS</div><small>THE BIG HOTEL STORE</small></div>
-    <nav class="nav">
-      <button onclick="showNavNotice('Dashboard')"><span>⌂</span><span class="navtext">Dashboard</span></button>
-      <button class="active" onclick="backToFormats()"><span>▤</span><span class="navtext">Create Quotation</span></button>
-      <button onclick="showHistory()"><span>◷</span><span class="navtext">Manage Quotations</span></button>
-      <button onclick="document.getElementById('catalogPanel').scrollIntoView({behavior:'smooth'})"><span>▦</span><span class="navtext">Product Catalogue</span></button>
-      <button onclick="document.getElementById('customerName').focus()"><span>♙</span><span class="navtext">Customers</span></button>
-      <button onclick="showNavNotice('Employees')"><span>♧</span><span class="navtext">Employees</span></button>
-      <button onclick="exportHistory()"><span>▤</span><span class="navtext">Reports / Export</span></button>
-      <button onclick="showNavNotice('Settings')"><span>⚙</span><span class="navtext">Settings</span></button>
-    </nav>
-    <div class="sidefoot">Your Partner in Hospitality Excellence</div>
-  </aside>
+
 
   <aside class="editor">
     <button class="btn back-btn" onclick="backToFormats()">← Back to formats</button><h1>Edit Quotation</h1><div class="sub">Test version · Local demo data</div>
