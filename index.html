@@ -12,12 +12,12 @@
 }
 *{box-sizing:border-box} body{margin:0;background:#f4eeee;color:var(--ink);font:14px/1.45 Inter,Segoe UI,Arial,sans-serif}
 button,input,select,textarea{font:inherit} button{cursor:pointer}
-.app{min-height:100vh;display:grid;grid-template-columns:220px minmax(290px,360px) minmax(500px,1fr)}
-.sidebar{background:linear-gradient(180deg,#51151c,#70232c);color:#fff;padding:24px 16px;display:flex;flex-direction:column;gap:24px}
+.app{min-height:100vh;display:grid;grid-template-columns:1fr}.app.editing{grid-template-columns:minmax(280px,360px) minmax(0,1fr)}
+.sidebar{display:none}
 .brand{padding:8px 10px 18px;border-bottom:1px solid #ffffff30}.brand-mark{font-family:Georgia,serif;font-size:35px;letter-spacing:-3px}.brand small{display:block;font-size:10px;letter-spacing:2px;opacity:.85}
 .nav{display:grid;gap:6px}.nav button{border:0;background:transparent;color:#f8e9e9;text-align:left;padding:11px 12px;border-radius:9px}.nav button.active,.nav button:hover{background:#ffffff20}.nav span{display:inline-block;width:26px}
 .sidefoot{margin-top:auto;font-size:11px;opacity:.8}
-.editor{padding:22px 18px;background:#fbf7f6;border-right:1px solid var(--line);max-height:100vh;overflow:auto}
+.editor{display:none;padding:22px 18px;background:#fbf7f6;border-right:1px solid var(--line);max-height:100vh;overflow:auto}
 h1,h2,h3,p{margin-top:0} h1{font-size:21px;margin-bottom:4px} h2{font-size:15px;margin-bottom:12px} h3{font-size:12px;color:var(--maroon);margin-bottom:8px}
 .sub{color:var(--muted);font-size:12px;margin-bottom:20px}
 .steps{display:flex;gap:8px;margin:18px 0}.step{flex:1;text-align:center;font-size:10px;color:var(--muted);border-bottom:2px solid var(--line);padding:7px 0}.step.active{color:var(--red);border-color:var(--red);font-weight:700}
@@ -29,7 +29,7 @@ textarea{resize:vertical;min-height:55px}.two{display:grid;grid-template-columns
 .btn{border:1px solid var(--line);background:white;color:var(--maroon);padding:9px 12px;border-radius:8px;font-weight:650}.btn.primary{background:var(--red);color:white;border-color:var(--red)}.btn.dark{background:var(--maroon);color:white;border-color:var(--maroon)}.btn.small{padding:5px 8px;font-size:11px}.btn:hover{filter:brightness(.97)}.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
 .catalogue-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #f0e7e6}.catalogue-item:last-child{border-bottom:0}.catalogue-item b{font-size:12px}.catalogue-item small{display:block;color:var(--muted);font-size:10px}
 .product-search{margin-bottom:7px}.mini-note{font-size:10px;color:var(--muted);line-height:1.5}
-.workspace{padding:22px;min-width:0;overflow:auto}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.topbar p{margin:0;color:var(--muted);font-size:12px}.top-actions{display:flex;gap:7px;flex-wrap:wrap}
+.workspace{display:none;padding:22px;min-width:0;overflow:auto}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.topbar p{margin:0;color:var(--muted);font-size:12px}.top-actions{display:flex;gap:7px;flex-wrap:wrap}
 .designs{display:flex;gap:8px;flex-wrap:wrap}.design{border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:#fff;min-width:120px;flex:1}.design.selected{border-color:var(--red);box-shadow:0 0 0 2px #a83b4517}.design strong{display:block;font-size:12px}.design small{color:var(--muted);font-size:10px}
 .preview-wrap{display:flex;justify-content:center;padding:18px 0 40px}.paper{width:min(100%,820px);min-height:1000px;background:var(--paper);box-shadow:var(--shadow);border:1px solid #e4d7d6;padding:35px 38px;position:relative}
 .paper-head{display:flex;align-items:center;justify-content:space-between;gap:18px;border-bottom:4px solid var(--maroon);padding-bottom:15px}.logo{display:flex;align-items:center;gap:12px}.logo-mark{font:32px Georgia,serif;color:var(--maroon);letter-spacing:-3px}.logo-text{font-size:16px;line-height:1.1;font-weight:800;letter-spacing:.4px}.logo-text small{font-size:8px;letter-spacing:1.5px;display:block;margin-top:5px;color:var(--muted)}
@@ -45,13 +45,52 @@ table{width:100%;border-collapse:collapse} .items-table{font-size:9px}.items-tab
 .toast{position:fixed;right:20px;bottom:20px;background:#30282a;color:white;padding:12px 16px;border-radius:9px;box-shadow:var(--shadow);display:none;z-index:5}
 body.format-classic .section-total{display:none}body.format-classic .section-title{background:#f0e3e2;color:var(--maroon)}
 body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .quote-heading h2{letter-spacing:2px}
-@media(max-width:1200px){.app{grid-template-columns:70px minmax(270px,330px) minmax(460px,1fr)}.sidebar{padding:18px 9px}.brand-mark{font-size:23px}.brand small,.nav .navtext,.sidefoot{display:none}.nav button{text-align:center;padding:12px 4px}.nav span{width:auto}}
+@media(max-width:1200px){.app.editing{grid-template-columns:minmax(270px,330px) minmax(460px,1fr)}}
 @media(max-width:850px){.app{display:block}.sidebar{display:none}.editor{max-height:none;border-right:0}.workspace{padding:12px}.paper{padding:20px;min-height:950px}.paper-foot{left:20px;right:20px}.parties{grid-template-columns:1fr}.quote-heading{flex-direction:column}.quote-meta{width:100%}.company-info{font-size:8px}.items-table{font-size:8px}.items-table th,.items-table td{padding:4px 2px}.hide-mobile{display:none}}
 @media print{body{background:#fff}.sidebar,.editor,.topbar,.design-picker,.no-print{display:none!important}.app{display:block}.workspace{padding:0;overflow:visible}.preview-wrap{padding:0;display:block}.paper{width:100%;min-height:0;border:0;box-shadow:none;padding:12mm 10mm 18mm;margin:0;page-break-after:always}.paper:last-child{page-break-after:auto}.paper-foot{position:fixed;bottom:5mm;left:10mm;right:10mm}.section-title{break-after:avoid}.items-table tr{break-inside:avoid} @page{size:A4;margin:0}}
+
+.landing{min-height:100vh;background:radial-gradient(circle at 80% 0%,#f4dddd 0,transparent 34%),#fbf7f6;padding:clamp(22px,5vw,64px)}
+.landing-inner{max-width:1080px;margin:auto}.landing-brand{display:flex;align-items:center;gap:14px;margin-bottom:46px}
+.landing-logo{font:42px Georgia,serif;color:var(--maroon);letter-spacing:-4px;border-right:1px solid var(--line);padding-right:15px}
+.landing-brand strong{display:block;font-size:17px;letter-spacing:.7px;color:var(--maroon)}.landing-brand small{display:block;font-size:10px;letter-spacing:1.7px;color:var(--muted);margin-top:4px}
+.landing-eyebrow{color:var(--red);font-size:11px;letter-spacing:2px;font-weight:800;text-transform:uppercase;margin-bottom:10px}
+.landing h1{font-size:clamp(30px,4vw,44px);margin-bottom:10px;color:#3c2528}.landing-intro{color:var(--muted);font-size:15px;max-width:620px;margin-bottom:30px}
+.format-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:28px 0 24px}
+.format-card{border:1px solid var(--line);border-radius:15px;padding:17px;background:white;text-align:left;cursor:pointer;color:var(--ink);box-shadow:0 5px 18px #521b2009}
+.format-card.selected{border:2px solid var(--red);padding:16px;box-shadow:0 0 0 3px #a83b4513}
+.format-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
+.format-letter{font-size:11px;color:var(--red);font-weight:800;letter-spacing:1px}.radio-dot{width:18px;height:18px;border:1.5px solid #bba7a8;border-radius:50%}
+.format-card.selected .radio-dot{border:6px solid var(--red)}
+.format-thumb{height:145px;background:linear-gradient(#fff,#fbf3f2);border:1px solid #efe1e0;border-radius:8px;padding:13px;margin-bottom:15px;overflow:hidden}
+.thumb-head{height:20px;border-bottom:4px solid var(--maroon);display:flex;justify-content:space-between;margin-bottom:10px}.thumb-head:before{content:"TBHS";font:12px Georgia,serif;color:var(--maroon)}.thumb-head:after{content:"QUOTATION";font-size:6px;color:var(--red);font-weight:800}
+.thumb-line{height:5px;background:#eadbda;margin:6px 0;border-radius:2px}.thumb-line.short{width:52%}.thumb-line.mid{width:75%}.thumb-table{margin-top:10px}.thumb-row{height:12px;border-bottom:1px solid #e9dedd;display:grid;grid-template-columns:1fr 3fr 1fr;gap:5px}.thumb-row:first-child{background:var(--maroon);height:14px}.thumb-row span{background:#eadbda;margin:3px 0}.thumb-row:first-child span{background:#f4dfe0}
+.format-card h2{font-size:17px;margin-bottom:6px;color:var(--maroon)}.format-card p{font-size:12px;color:var(--muted);min-height:38px;margin-bottom:13px}
+.feature-pills{display:flex;gap:6px;flex-wrap:wrap}.feature-pills span{font-size:10px;border-radius:99px;background:#f7eaea;color:#744047;padding:5px 8px}
+.landing-bottom{display:flex;justify-content:space-between;align-items:center;gap:20px;border-top:1px solid var(--line);padding-top:22px;margin-top:24px}
+.landing-note{font-size:12px;color:var(--muted);max-width:500px}.create-btn{background:var(--maroon);color:white;border:0;border-radius:9px;padding:14px 25px;font-weight:750;min-width:200px}
+.back-btn{margin-bottom:14px}
+@media(max-width:800px){.format-cards{grid-template-columns:1fr}.landing-bottom{align-items:stretch;flex-direction:column}.create-btn{width:100%}}
+@media(max-width:850px){.app.editing{display:block}.editor{max-height:none;border-right:0}.workspace{padding:12px}}
+
 </style>
 </head>
 <body class="format-section">
-<div class="app">
+<div class="app" id="appRoot">
+
+<section class="landing" id="landingPage">
+ <div class="landing-inner">
+  <div class="landing-brand"><div class="landing-logo">TBHS</div><div><strong>THE BIG HOTEL STORE</strong><small>HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS</small></div></div>
+  <div class="landing-eyebrow">Quotation Studio</div><h1>Create a new quotation</h1>
+  <p class="landing-intro">Choose a quotation design for your customer or project. On the next screen, you can edit customer details, products, rates, discounts and terms.</p>
+  <div class="format-cards">
+   <button class="format-card" id="landing-classic" onclick="chooseLandingFormat('classic')"><div class="format-card-head"><span class="format-letter">FORMAT A</span><span class="radio-dot"></span></div><div class="format-thumb"><div class="thumb-head"></div><div class="thumb-line mid"></div><div class="thumb-line short"></div><div class="thumb-table"><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div></div></div><h2>Classic</h2><p>A clean, straightforward quotation with one continuous item list and a final summary.</p><div class="feature-pills"><span>Simple</span><span>Professional</span></div></button>
+   <button class="format-card selected" id="landing-section" onclick="chooseLandingFormat('section')"><div class="format-card-head"><span class="format-letter">FORMAT B · RECOMMENDED</span><span class="radio-dot"></span></div><div class="format-thumb"><div class="thumb-head"></div><div class="thumb-line mid"></div><div class="thumb-line short"></div><div class="thumb-table"><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div></div><div class="thumb-line short" style="margin-left:auto"></div><div class="thumb-table"><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div></div></div><h2>Section Wise</h2><p>Group products into Ducting, Pipeline, Banquet or Restaurant sections, with section totals.</p><div class="feature-pills"><span>Grouped items</span><span>Section totals</span></div></button>
+   <button class="format-card" id="landing-premium" onclick="chooseLandingFormat('premium')"><div class="format-card-head"><span class="format-letter">FORMAT C</span><span class="radio-dot"></span></div><div class="format-thumb"><div class="thumb-head"></div><div class="thumb-line mid"></div><div class="thumb-line short"></div><div style="display:flex;gap:7px;margin-top:9px"><div style="height:28px;flex:1;background:#f0dedd;border-radius:3px"></div><div style="height:28px;flex:1;background:#f0dedd;border-radius:3px"></div></div><div class="thumb-table"><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div></div></div><h2>Premium Project</h2><p>A polished presentation for larger projects and customer-facing proposals.</p><div class="feature-pills"><span>Elegant</span><span>Project-ready</span></div></button>
+  </div>
+  <div class="landing-bottom"><div class="landing-note"><b>What happens next?</b><br>Your selected design opens in the quotation editor, where you can fill in customer details, add products from the catalogue and preview the quotation before printing.</div><button class="create-btn" onclick="startCreate()">Create Quotation&nbsp; →</button></div>
+ </div>
+</section>
+
   <aside class="sidebar">
     <div class="brand"><div class="brand-mark">TBHS</div><small>THE BIG HOTEL STORE</small></div>
     <nav class="nav">
@@ -68,7 +107,7 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
   </aside>
 
   <aside class="editor">
-    <h1>Create Quotation</h1><div class="sub">Test version · Local demo data</div>
+    <button class="btn back-btn" onclick="backToFormats()">← Back to formats</button><h1>Edit Quotation</h1><div class="sub">Test version · Local demo data</div>
     <div class="steps"><div class="step active">1 Details</div><div class="step active">2 Products</div><div class="step active">3 Preview</div></div>
     <section class="panel">
       <h3>QUOTATION DETAILS</h3>
@@ -159,6 +198,12 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 </div>
 <div class="toast" id="toast"></div>
 <script>
+
+let landingFormat="section";
+function chooseLandingFormat(format){landingFormat=format;["classic","section","premium"].forEach(f=>document.getElementById("landing-"+f).classList.toggle("selected",f===format));}
+function startCreate(){setFormat(landingFormat);document.getElementById("landingPage").style.display="none";document.getElementById("appRoot").classList.add("editing");document.querySelector(".editor").style.display="block";document.querySelector(".workspace").style.display="block";window.scrollTo(0,0);}
+function backToFormats(){document.querySelector(".editor").style.display="none";document.querySelector(".workspace").style.display="none";document.getElementById("appRoot").classList.remove("editing");document.getElementById("landingPage").style.display="block";window.scrollTo(0,0);}
+
 const DEMO_CATALOGUE = [
  {id:1,name:"Coffee Cup 200ml",brand:"Ariane",code:"P-20",model:"",unit:"PCS",rate:450,gst:18,category:"Restaurant"},
  {id:2,name:"Sauce Bowl",brand:"KTC",code:"K-32",model:"",unit:"PCS",rate:250,gst:18,category:"Restaurant"},
