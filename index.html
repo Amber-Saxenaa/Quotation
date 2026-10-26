@@ -133,6 +133,46 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 @media(max-width:1050px){.selected-preview{grid-template-columns:minmax(0,1fr);}.selected-preview .preview-paper{max-width:620px;width:100%;font-size:8px}.selected-preview-info{position:static;padding:8px 4px}.mock-brand b{font-size:10px}.mock-brand small{font-size:5px}.mock-company{font-size:6px}.mock-quotehead h3{font-size:20px}.mock-quotehead>div{font-size:7px}.mock-parties>div>b{font-size:7px}.mock-parties strong{font-size:9px}.mock-items{font-size:7px}.mock-items th{font-size:6px}.mock-section-title{font-size:7px}.mock-total{font-size:8px}.mock-total .grand{font-size:10px}}
 @media(max-width:600px){.selected-preview{padding:12px;gap:14px}.selected-preview .preview-paper{padding:12px;max-width:100%}.mock-brand b{white-space:normal}.mock-parties>div{min-height:55px}.mock-items td,.mock-items th{padding:3px 2px}}
 
+
+/* Improved create quotation heading and navigation destination pages */
+.landing-title-row{display:flex;align-items:center;justify-content:space-between;gap:24px;margin:0 0 10px}
+.landing-title-row h1{margin:0}
+.heading-create-btn{flex:0 0 auto;min-width:190px;white-space:nowrap}
+.landing-intro{max-width:720px}
+.landing-bottom{margin-top:20px}
+.nav-page{grid-column:2;min-width:0;min-height:100vh;padding:clamp(22px,4vw,48px);background:radial-gradient(circle at 90% 0%,#f4dddd 0,transparent 30%),#fbf7f6}
+.nav-page-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:28px}
+.nav-page-head h1{font-size:34px;color:#3c2528;margin:0 0 8px}
+.nav-page-head p{color:var(--muted);font-size:14px;margin:0}
+.nav-page .btn.primary{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+.page-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:22px}
+.page-card,.page-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 5px 18px #521b2008;min-width:0}
+.page-card .metric{font-size:30px;color:var(--maroon);font-weight:800;margin:8px 0}
+.page-card .muted,.page-panel .muted{font-size:12px;color:var(--muted)}
+.page-panel{margin-bottom:18px}
+.page-panel h2{font-size:16px;color:var(--maroon);margin-bottom:14px}
+.page-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.page-toolbar input,.page-toolbar select,.page-form input,.page-form select,.page-form textarea{border:1px solid var(--line);border-radius:8px;padding:10px;background:#fff;color:var(--ink);font:inherit}
+.page-toolbar input{min-width:220px;flex:1}
+.page-table-wrap{overflow:auto}
+.page-table{width:100%;border-collapse:collapse;font-size:12px;min-width:620px}
+.page-table th{background:#f7eaea;color:var(--maroon);text-align:left;padding:11px 10px}
+.page-table td{padding:11px 10px;border-bottom:1px solid #f0e4e3;vertical-align:top}
+.page-table button,.mini-action{border:1px solid var(--line);background:#fff;color:var(--maroon);padding:6px 9px;border-radius:7px;cursor:pointer;font-weight:700}
+.page-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.page-form label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;color:var(--maroon)}
+.page-form .wide{grid-column:1/-1}
+.page-list{display:grid;gap:10px}
+.page-list-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #f0e4e3}
+.page-list-row:last-child{border-bottom:0}
+.page-list-row strong{display:block;font-size:13px}.page-list-row small{color:var(--muted);font-size:11px}
+.nav .active{background:#87434a}
+@media(max-width:1000px){.page-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.landing-title-row{align-items:flex-start;flex-direction:column}.heading-create-btn{width:auto}}
+@media(max-width:650px){.page-grid{grid-template-columns:1fr}.nav-page-head{align-items:flex-start;flex-direction:column}.nav-page-head h1{font-size:28px}.page-form{grid-template-columns:1fr}.page-form .wide{grid-column:auto}}
+
+
+@media(min-width:851px){.app{grid-template-columns:176px minmax(0,1fr);align-items:stretch}.app.editing{grid-template-columns:176px minmax(280px,360px) minmax(0,1fr)}.sidebar{grid-column:1;grid-row:1 / span 4;position:sticky;top:0;height:100vh;align-self:start}.landing,.nav-page{grid-column:2;grid-row:1}.editor{grid-column:2;grid-row:1}.workspace{grid-column:3;grid-row:1}.app.full-quote{display:block!important}.app.full-quote .sidebar{display:none!important}}
+
 </style>
 </head>
 <body class="format-section">
@@ -141,14 +181,14 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
   <aside class="sidebar">
     <div class="brand"><div class="brand-mark">TBHS</div><small>THE BIG HOTEL STORE</small></div>
     <nav class="nav">
-      <button onclick="showNavNotice('Dashboard')"><span>⌂</span><span class="navtext">Dashboard</span></button>
+      <button onclick="showAppPage('Dashboard')"><span>⌂</span><span class="navtext">Dashboard</span></button>
       <button class="active" onclick="backToFormats()"><span>▤</span><span class="navtext">Create Quotation</span></button>
-      <button onclick="showHistory()"><span>◷</span><span class="navtext">Manage Quotations</span></button>
-      <button onclick="document.getElementById('catalogPanel').scrollIntoView({behavior:'smooth'})"><span>▦</span><span class="navtext">Product Catalogue</span></button>
-      <button onclick="document.getElementById('customerName').focus()"><span>♙</span><span class="navtext">Customers</span></button>
-      <button onclick="showNavNotice('Employees')"><span>♧</span><span class="navtext">Employees</span></button>
-      <button onclick="exportHistory()"><span>▤</span><span class="navtext">Reports / Export</span></button>
-      <button onclick="showNavNotice('Settings')"><span>⚙</span><span class="navtext">Settings</span></button>
+      <button onclick="showAppPage('Manage Quotations')"><span>◷</span><span class="navtext">Manage Quotations</span></button>
+      <button onclick="showAppPage('Product Catalogue')"><span>▦</span><span class="navtext">Product Catalogue</span></button>
+      <button onclick="showAppPage('Customers')"><span>♙</span><span class="navtext">Customers</span></button>
+      <button onclick="showAppPage('Employees')"><span>♧</span><span class="navtext">Employees</span></button>
+      <button onclick="showAppPage('Reports / Export')"><span>▤</span><span class="navtext">Reports / Export</span></button>
+      <button onclick="showAppPage('Settings')"><span>⚙</span><span class="navtext">Settings</span></button>
     </nav>
     <div class="sidefoot">Your Partner in Hospitality Excellence</div>
   </aside>
@@ -157,7 +197,7 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 <section class="landing" id="landingPage">
  <div class="landing-inner">
   <div class="landing-brand"><div class="landing-logo">TBHS</div><div><strong>THE BIG HOTEL STORE</strong><small>HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS</small></div></div>
-  <div class="landing-eyebrow">Quotation Studio</div><h1>Create a new quotation</h1>
+  <div class="landing-eyebrow">Quotation Studio</div><div class="landing-title-row"><h1>Create a new quotation</h1><button class="create-btn heading-create-btn" onclick="startCreate()">Create Quotation&nbsp; →</button></div>
   <p class="landing-intro">Choose a quotation design for your customer or project. On the next screen, you can edit customer details, products, rates, discounts and terms.</p>
   <div class="format-cards">
    <button class="format-card" id="landing-classic" onclick="chooseLandingFormat('classic')"><div class="format-card-head"><span class="format-letter">FORMAT A</span><span class="radio-dot"></span></div><div class="format-thumb"><div class="thumb-head"></div><div class="thumb-line mid"></div><div class="thumb-line short"></div><div class="thumb-table"><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div><div class="thumb-row"><span></span><span></span><span></span></div></div></div><h2>Classic</h2><p>A clean, straightforward quotation with one continuous item list and a final summary.</p><div class="feature-pills"><span>Simple</span><span>Professional</span></div></button>
@@ -188,7 +228,7 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
     </div>
     <div class="selected-preview-info"><div class="landing-eyebrow" id="selectedFormatLabel">SELECTED FORMAT · B</div><h2 id="selectedFormatTitle">Section Wise quotation</h2><p id="selectedFormatDescription">Products are grouped under section headings, with section totals and a final summary.</p><div class="feature-pills" id="selectedFormatFeatures"><span>Section headings</span><span>Section totals</span><span>Final summary</span></div><p class="mock-preview-note">Full-page A4-style sample preview. The final quotation will use your selected design and actual entered product data.</p></div>
   </div>
-  <div class="landing-bottom"><div class="landing-note"><b>What happens next?</b><br>Your selected design opens in the quotation editor, where you can fill in customer details, add products from the catalogue and preview the quotation before printing.</div><button class="create-btn" onclick="startCreate()">Create Quotation&nbsp; →</button></div>
+  <div class="landing-bottom"><div class="landing-note"><b>What happens next?</b><br>Choose a design above, then use the Create Quotation button beside the heading to open the editable quotation workspace.</div></div>
  </div>
 </section>
 
@@ -254,7 +294,7 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
   <main class="workspace">
     <div class="topbar">
       <div><h1>Quotation Preview</h1><p>Live A4 preview · Edit details or add products on the left</p></div>
-      <div class="top-actions"><button class="btn" onclick="exportCSV()">Export CSV</button><button class="btn primary" id="fullPageCreateBtn" onclick="openFullPageQuote()">Create</button><button class="btn" onclick="exportHistory()">History CSV</button><button class="btn primary" onclick="window.print()">Print / Save PDF</button></div>
+      <div class="top-actions"><button class="btn" onclick="exportCSV()">Export CSV</button><button class="btn primary" id="fullPageCreateBtn" onclick="openFullPageQuote()">Create</button><button class="btn" onclick="showAppPage('Reports / Export')">History CSV</button><button class="btn primary" onclick="window.print()">Print / Save PDF</button></div>
     </div>
     <div class="preview-wrap"><article class="paper" id="paper">
       <header class="paper-head">
@@ -288,7 +328,7 @@ function chooseLandingFormat(format){
  document.getElementById("mockSectionTitle").textContent=format==="classic"?"QUOTATION ITEMS":format==="premium"?"PROJECT SCOPE & ITEMS":"DUCTING";
  document.querySelector(".mock-second-section").style.display=format==="classic"?"none":"block";
 }
-function startCreate(){setFormat(landingFormat);document.getElementById("landingPage").style.display="none";document.getElementById("appRoot").classList.add("editing");document.querySelector(".editor").style.display="block";document.querySelector(".workspace").style.display="block";window.scrollTo(0,0);}
+function startCreate(){setFormat(landingFormat);document.getElementById("navPage").style.display="none";document.getElementById("landingPage").style.display="none";document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.innerText.replace(/\s+/g," ").trim()==="Create Quotation"));document.getElementById("appRoot").classList.add("editing");document.querySelector(".editor").style.display="block";document.querySelector(".workspace").style.display="block";window.scrollTo(0,0);}
 function openFullPageQuote(){
   const app=document.getElementById("appRoot");
   app.classList.add("full-quote");
@@ -318,7 +358,7 @@ function enableFullPageEditing(){
     el.addEventListener("keydown",function(ev){if(ev.key==="Escape"){document.execCommand("undo");el.blur()}if(ev.key==="Enter"&&!ev.shiftKey&&el.tagName!=="DIV"){ev.preventDefault();el.blur()}},{once:true});
   };
 }
-function backToFormats(){document.getElementById("appRoot").classList.remove("full-quote");document.querySelector(".editor").style.display="none";document.querySelector(".workspace").style.display="none";document.getElementById("appRoot").classList.remove("editing");document.getElementById("landingPage").style.display="block";window.scrollTo(0,0);}
+function backToFormats(){document.getElementById("appRoot").classList.remove("full-quote","editing");document.querySelector(".editor").style.display="none";document.querySelector(".workspace").style.display="none";document.getElementById("navPage").style.display="none";document.getElementById("landingPage").style.display="block";document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.innerText.replace(/\s+/g," ").trim()==="Create Quotation"));window.scrollTo(0,0);}
 
 const DEMO_CATALOGUE = [
  {id:1,name:"Coffee Cup 200ml",brand:"Ariane",code:"P-20",model:"",unit:"PCS",rate:450,gst:18,category:"Restaurant"},
@@ -355,7 +395,82 @@ function groupedItems(){const groups={};items.forEach(i=>{const key=currentForma
 
 function addLineBelow(id){const index=items.findIndex(i=>i.id===id);if(index<0)return;const source=items[index];items.splice(index+1,0,{...source,id:Date.now()+Math.random(),name:"New product",code:"",qty:1,rate:0,discount:0});renderQuote();toast("Line added — double-click cells to edit")}
 function removeLine(id){items=items.filter(i=>i.id!==id);renderQuote();toast("Line removed")}
-function showNavNotice(section){toast(section+" page is a placeholder in this test version")}
+
+let activeAppPage="Create Quotation";
+function showAppPage(page){
+  if(page==="Create Quotation"){backToFormats();return}
+  activeAppPage=page;
+  const app=document.getElementById("appRoot");
+  app.classList.remove("editing","full-quote");
+  document.querySelector(".editor").style.display="none";
+  document.querySelector(".workspace").style.display="none";
+  document.getElementById("landingPage").style.display="none";
+  document.getElementById("navPage").style.display="block";
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.innerText.replace(/\s+/g," ").trim()===page));
+  document.getElementById("navPageTitle").textContent=page;
+  const subtitles={
+    "Dashboard":"Your quotation workspace at a glance.",
+    "Manage Quotations":"Find, review, reopen and export quotations saved in this browser.",
+    "Product Catalogue":"Maintain the demo product list used when building quotations.",
+    "Customers":"Customer records gathered from saved quotations.",
+    "Employees":"Demo employee directory and responsibilities.",
+    "Reports / Export":"Export quotation history and review basic sales totals.",
+    "Settings":"Configure default quotation details for this test version."
+  };
+  document.getElementById("navPageSubtitle").textContent=subtitles[page]||"TBHS workspace";
+  let content=document.getElementById("navPageContent");
+  if(page==="Dashboard") content=renderDashboard();
+  else if(page==="Manage Quotations") content=renderManageQuotes();
+  else if(page==="Product Catalogue") content=renderCataloguePage();
+  else if(page==="Customers") content=renderCustomersPage();
+  else if(page==="Employees") content=renderEmployeesPage();
+  else if(page==="Reports / Export") content=renderReportsPage();
+  else if(page==="Settings") content=renderSettingsPage();
+  document.getElementById("navPageContent").innerHTML=content;
+  window.scrollTo(0,0);
+}
+function readSavedQuotes(){try{return JSON.parse(localStorage.getItem("tbhs_quotes")||"[]")}catch(e){return []}}
+function pageTable(headers, rows, emptyText="No records to show yet."){
+ if(!rows.length)return `<div class="muted" style="padding:20px 0">${emptyText}</div>`;
+ return `<div class="page-table-wrap"><table class="page-table"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c??""}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+function renderDashboard(){
+ const q=readSavedQuotes(), total=q.reduce((a,x)=>a+num(x.total),0);
+ const latest=q.slice(0,5);
+ return `<div class="page-grid">
+  <div class="page-card"><div class="muted">SAVED QUOTATIONS</div><div class="metric">${q.length}</div><div class="muted">Stored in this browser for testing</div></div>
+  <div class="page-card"><div class="muted">TOTAL QUOTATION VALUE</div><div class="metric">${money(total)}</div><div class="muted">Based on saved demo quotations</div></div>
+  <div class="page-card"><div class="muted">PRODUCTS IN CATALOGUE</div><div class="metric">${catalogue.length}</div><div class="muted">Sample catalogue records</div></div>
+ </div><section class="page-panel"><h2>Quick actions</h2><div class="page-toolbar"><button class="btn primary" onclick="showAppPage('Create Quotation')">+ Create quotation</button><button class="btn" onclick="showAppPage('Product Catalogue')">Browse catalogue</button><button class="btn" onclick="showAppPage('Manage Quotations')">Manage quotations</button><button class="btn" onclick="showAppPage('Reports / Export')">Reports & export</button></div></section>
+ <section class="page-panel"><h2>Recent quotations</h2>${pageTable(["Quotation No.","Customer","Date","Total",""],latest.map(x=>[`<b>${esc(x.quoteNo||"—")}</b>`,esc(x.customer||"—"),esc(x.date||"—"),money(x.total),`<button onclick="reopenSavedQuote('${String(x.quoteNo||"").replace(/'/g,"")}')">Open</button>`]),"No saved quotations yet. Create and save a test quotation to see it here.")}</section>`;
+}
+function renderManageQuotes(){
+ const q=readSavedQuotes();
+ return `<section class="page-panel"><h2>Quotation history</h2><div class="page-toolbar"><input id="quoteFilter" placeholder="Search quotation no. or customer..." oninput="filterQuoteTable()"><button class="btn" onclick="exportHistory()">Export CSV</button><button class="btn primary" onclick="showAppPage('Create Quotation')">+ New quotation</button></div><div id="quoteHistoryTable">${quoteHistoryTable(q)}</div></section>`;
+}
+function quoteHistoryTable(q){return pageTable(["Quotation No.","Customer","Date","Expiry","Total","Actions"],q.map(x=>[`<b>${esc(x.quoteNo||"—")}</b>`,esc(x.customer||"—"),esc(x.date||"—"),esc(x.expiry||"—"),money(x.total),`<button onclick="reopenSavedQuote('${String(x.quoteNo||"").replace(/'/g,"")}')">Open</button>`]),"No saved quotations in this browser yet.")}
+function filterQuoteTable(){const q=readSavedQuotes(),term=(document.getElementById("quoteFilter")?.value||"").toLowerCase();document.getElementById("quoteHistoryTable").innerHTML=quoteHistoryTable(q.filter(x=>`${x.quoteNo} ${x.customer}`.toLowerCase().includes(term)))}
+function reopenSavedQuote(quoteNo){const q=readSavedQuotes().find(x=>x.quoteNo===quoteNo);if(!q){toast("Saved record not found");return}showAppPage("Create Quotation");if(q.customer)document.getElementById("customerName").value=q.customer;if(q.quoteNo)document.getElementById("quoteNo").value=q.quoteNo;renderQuote();toast("Loaded saved quotation details. Product rows are not restored in this demo yet.")}
+function renderCataloguePage(){
+ const rows=catalogue.map(p=>[`<b>${esc(p.name)}</b>`,esc(p.brand||"—"),esc(p.code||"—"),esc(p.model||"—"),esc(p.category||"—"),money(p.rate),`<button onclick="addProductFromPage(${p.id})">Add to quotation</button>`]);
+ return `<section class="page-panel"><h2>Product catalogue <span class="muted">${catalogue.length} demo products</span></h2><div class="page-toolbar"><input id="catalogPageSearch" placeholder="Search product, brand, code or model..." oninput="filterCataloguePage()"><button class="btn primary" onclick="document.getElementById('newProductForm').style.display='grid'">+ Add product</button></div><div id="catalogPageTable">${cataloguePageTable(rows)}</div><div id="newProductForm" class="page-form" style="display:none;margin-top:20px"><label>Product name<input id="pageNewName" placeholder="Product name"></label><label>Brand<input id="pageNewBrand" placeholder="Brand"></label><label>Item code<input id="pageNewCode" placeholder="Item code"></label><label>Model<input id="pageNewModel" placeholder="Model"></label><label>Category<input id="pageNewCategory" placeholder="e.g. Banquet"></label><label>Rate (₹)<input id="pageNewRate" type="number" value="0"></label><div class="wide"><button class="btn primary" onclick="saveCatalogueFromPage()">Save product</button></div></div></section>`;
+}
+function cataloguePageTable(rows){return pageTable(["Product","Brand","Item Code","Model","Category","Default Rate","Action"],rows)}
+function filterCataloguePage(){const t=(document.getElementById("catalogPageSearch")?.value||"").toLowerCase();document.getElementById("catalogPageTable").innerHTML=cataloguePageTable(catalogue.filter(p=>[p.name,p.brand,p.code,p.model,p.category].join(" ").toLowerCase().includes(t)).map(p=>[`<b>${esc(p.name)}</b>`,esc(p.brand||"—"),esc(p.code||"—"),esc(p.model||"—"),esc(p.category||"—"),money(p.rate),`<button onclick="addProductFromPage(${p.id})">Add to quotation</button>`]))}
+function addProductFromPage(id){const p=catalogue.find(x=>x.id===id);if(p){addProduct(p);toast("Added to the current quotation draft");}}
+function saveCatalogueFromPage(){const name=document.getElementById("pageNewName").value.trim();if(!name){toast("Enter a product name");return}catalogue.push({id:Date.now(),name,brand:document.getElementById("pageNewBrand").value,code:document.getElementById("pageNewCode").value,model:document.getElementById("pageNewModel").value,category:document.getElementById("pageNewCategory").value||"General",rate:num(document.getElementById("pageNewRate").value),unit:"PCS",gst:18});renderCatalogue();showAppPage("Product Catalogue");toast("Product added to this test session");}
+function renderCustomersPage(){
+ const map={};readSavedQuotes().forEach(q=>{const n=q.customer||"Unnamed customer";if(!map[n])map[n]={name:n,count:0,last:q.date||"—",total:0};map[n].count++;map[n].total+=num(q.total)});
+ const rows=Object.values(map).map(c=>[`<b>${esc(c.name)}</b>`,c.count,c.last,money(c.total),`<button onclick="openCustomerDraft('${c.name.replace(/'/g,"")}')">Use in quotation</button>`]);
+ return `<section class="page-panel"><h2>Customer directory</h2><p class="muted">Customers are collected from quotations saved in this browser. Full customer records will be connected later.</p>${pageTable(["Customer / Hotel","Quotes","Last Quoted","Total Quoted","Action"],rows,"No customers yet. Save a quotation to build the customer directory.")}</section>`;
+}
+function openCustomerDraft(name){showAppPage("Create Quotation");document.getElementById("customerName").value=name;renderQuote();document.getElementById("customerName").focus()}
+function renderEmployeesPage(){return `<div class="page-grid"><div class="page-card"><div class="muted">WORKSPACE ACCESS</div><div class="metric">Local</div><div class="muted">This test app runs in one browser only.</div></div><div class="page-card"><div class="muted">EMPLOYEE RECORDS</div><div class="metric">3</div><div class="muted">Sample team entries</div></div><div class="page-card"><div class="muted">PERMISSIONS</div><div class="metric">Demo</div><div class="muted">No real sign-in or role enforcement yet.</div></div></div><section class="page-panel"><h2>Employee directory (sample)</h2>${pageTable(["Employee","Role","Access","Status"],[["Quotation Admin","Administrator","Settings, reports, quotations","Demo"],["Sales Executive","Quotation creator","Create and edit quotations","Demo"],["Catalogue Manager","Catalogue editor","Product catalogue","Demo"]])}<p class="muted">Employee accounts and shared access require a backend and authentication, which are not included in this standalone HTML test.</p></section>`}
+function renderReportsPage(){const q=readSavedQuotes(),total=q.reduce((a,x)=>a+num(x.total),0);return `<div class="page-grid"><div class="page-card"><div class="muted">QUOTATIONS SAVED</div><div class="metric">${q.length}</div></div><div class="page-card"><div class="muted">TOTAL VALUE</div><div class="metric">${money(total)}</div></div><div class="page-card"><div class="muted">AVERAGE QUOTATION</div><div class="metric">${money(q.length?total/q.length:0)}</div></div></div><section class="page-panel"><h2>Export reports</h2><p class="muted">Export saved quotation history from this browser as a CSV file for Excel.</p><div class="page-toolbar"><button class="btn primary" onclick="exportHistory()">Download quotation history CSV</button><button class="btn" onclick="showAppPage('Manage Quotations')">View quotation history</button></div></section>`}
+function renderSettingsPage(){return `<section class="page-panel"><h2>Quotation defaults</h2><p class="muted">These are local demo settings. They are not shared with other employees.</p><div class="page-form"><label>Supplier name<input id="settingSupplier" value="The Big Hotel Store"></label><label>Website<input id="settingWebsite" value="www.thebighotelstore.com"></label><label>Default GST (%)<input id="settingGST" type="number" value="18"></label><label>Default validity (days)<input id="settingValidity" type="number" value="14"></label><label class="wide">Default terms<textarea id="settingTerms" rows="3">Prices and taxes are as mentioned above. Delivery timeline will be confirmed after order confirmation.</textarea></label><div class="wide"><button class="btn primary" onclick="saveDemoSettings()">Save settings</button></div></div></section>`}
+function saveDemoSettings(){localStorage.setItem("tbhs_settings",JSON.stringify({supplier:document.getElementById("settingSupplier").value,website:document.getElementById("settingWebsite").value,gst:num(document.getElementById("settingGST").value),validity:num(document.getElementById("settingValidity").value),terms:document.getElementById("settingTerms").value}));toast("Demo settings saved in this browser")}
+
+function showNavNotice(section){showAppPage(section)}
 function enableCellEditing(){const table=document.getElementById("itemsPreview");table.ondblclick=function(e){const td=e.target.closest("td[data-field]");if(!td||td.isContentEditable)return;const tr=td.closest("tr"),item=items.find(x=>String(x.id)===tr.dataset.itemId);if(!item)return;const field=td.dataset.field,original=item[field];td.contentEditable="true";td.focus();const finish=()=>{td.contentEditable="false";let value=td.textContent.trim();if(["qty","rate","discount","gst"].includes(field)){value=Number(value.replace(/[₹,%\s,]/g,""));if(!Number.isFinite(value))value=original;item[field]=value}else item[field]=value;renderQuote()};td.onblur=finish;td.onkeydown=function(ev){if(ev.key==="Enter"){ev.preventDefault();td.blur()}if(ev.key==="Escape"){item[field]=original;renderQuote()}}}}
 
 function renderQuote(){
