@@ -108,20 +108,19 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 
 
 /* Full-page quotation mode */
-.app.full-quote{display:grid!important;grid-template-columns:330px minmax(0,1fr);align-items:start;min-height:100vh;background:#eee7e6;gap:0}
-.app.full-quote .sidebar{display:none!important}
-.app.full-quote .editor{display:block!important;grid-column:1;grid-row:1;position:sticky;top:0;height:100vh;max-height:100vh;overflow:auto;border-right:1px solid var(--line);padding:16px 14px;background:#fbf7f6}
-.app.full-quote .workspace{display:block!important;grid-column:2;grid-row:1;min-width:0;min-height:100vh;padding:18px clamp(12px,2vw,30px);overflow:visible}
-.app.full-quote .topbar{max-width:1250px;margin:0 auto 14px;position:sticky;top:0;z-index:4;background:#f4eeee;padding:10px 0}
+.app.full-quote{display:block!important;min-height:100vh;background:#eee7e6}
+.app.full-quote .sidebar,.app.full-quote .editor{display:none!important}
+.app.full-quote .workspace{display:block!important;min-height:100vh;padding:18px clamp(12px,3vw,42px);overflow:visible}
+.app.full-quote .topbar{max-width:1200px;margin:0 auto 14px;position:sticky;top:0;z-index:4;background:#f4eeee;padding:10px 0}
 .app.full-quote .preview-wrap{padding:0 0 36px;justify-content:center}
-.app.full-quote .paper{width:min(100%,900px);min-height:0;padding:clamp(18px,2vw,34px);box-shadow:0 8px 32px #34171a20;margin:0 auto}
+.app.full-quote .paper{width:min(100%,1100px);min-height:calc(100vh - 100px);padding:clamp(20px,3vw,42px);box-shadow:0 8px 32px #34171a20}
 .app.full-quote .paper [data-full-edit="true"]{cursor:text;outline-offset:2px}
 .app.full-quote .paper [data-full-edit="true"]:hover{outline:1px dashed #b76c72}
 .app.full-quote .paper [contenteditable="true"]{outline:2px solid #b85b64;background:#fff8d8;min-width:24px}
 .full-page-hint{display:none;font-size:11px;color:var(--muted);margin-top:4px}
 .app.full-quote .full-page-hint{display:block}
-@media(max-width:850px){.app.full-quote{display:flex!important;flex-direction:column}.app.full-quote .editor{position:relative;top:auto;width:100%;height:auto;max-height:48vh;order:1}.app.full-quote .workspace{width:100%;padding:10px;order:2}.app.full-quote .topbar{position:static;align-items:flex-start;flex-direction:column}.app.full-quote .paper{padding:16px}.app.full-quote .parties{grid-template-columns:1fr}.app.full-quote .quote-heading{flex-direction:column}}
-@media print{.app.full-quote .topbar{display:none!important}.app.full-quote .editor{display:none!important}.app.full-quote{display:block!important}.app.full-quote .workspace{padding:0;background:white}.app.full-quote .paper{width:100%;box-shadow:none;border:0;margin:0}.app.full-quote .paper [contenteditable="true"]{outline:none;background:transparent}}
+@media(max-width:850px){.app.full-quote .workspace{padding:10px}.app.full-quote .topbar{position:static;align-items:flex-start;flex-direction:column}.app.full-quote .paper{padding:16px}.app.full-quote .parties{grid-template-columns:1fr}.app.full-quote .quote-heading{flex-direction:column}}
+@media print{.app.full-quote .topbar{display:none!important}.app.full-quote .workspace{padding:0;background:white}.app.full-quote .paper{width:100%;box-shadow:none;border:0;margin:0}.app.full-quote .paper [contenteditable="true"]{outline:none;background:transparent}}
 
 
 /* Detailed, full-page A4 design preview on the format-selection screen */
@@ -179,11 +178,6 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 .items-table{table-layout:fixed}.items-table th{white-space:normal;text-align:center}.items-table td{word-break:break-word}.items-table .icol{background:#fff3c4}.items-table th.icol{background:#a8791c}
 #colDlg{border:1px solid var(--line);border-radius:14px;width:min(1000px,95%);padding:18px 20px}#colDlg::backdrop{background:#0006}
 .crow{display:grid;grid-template-columns:1.2fr .7fr 1.6fr 60px auto auto auto;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid #f0e4e3}.crow small{grid-column:1/-1;color:var(--muted);font-size:10px}.crow label{font-size:11px;margin:0;display:flex;gap:4px;align-items:center}.crow label input{width:auto}.crow button{padding:3px 8px;border:1px solid var(--line);background:#fff;border-radius:6px}
-.side-col-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:5px;align-items:center;padding:7px 0;border-bottom:1px solid #f0e4e3}.side-col-row input[type=text]{min-width:0;padding:6px;font-size:11px}.side-col-row .col-controls{display:flex;gap:2px}.side-col-row button{border:1px solid var(--line);background:#fff;color:var(--maroon);border-radius:5px;padding:3px 6px;cursor:pointer;font-size:11px}.side-col-row label{display:flex;align-items:center;gap:3px;font-size:10px;margin:0}.side-col-row input[type=checkbox]{width:auto}.side-col-foot{font-size:10px;color:var(--muted);margin-top:8px}.app.full-quote .editor h1{font-size:22px}.app.full-quote .editor .steps{position:sticky;top:0;background:#fbf7f6;z-index:2}
-</style>
-<style>
-/* Final layout override: full-page editor keeps the column controls docked beside the A4 quotation. */
-@media(min-width:851px){.app.full-quote{display:grid!important;grid-template-columns:330px minmax(0,1fr)!important;align-items:start!important}.app.full-quote .sidebar{display:none!important}.app.full-quote .editor{display:block!important;grid-column:1!important;grid-row:1!important;position:sticky!important;top:0!important;height:100vh!important;max-height:100vh!important;overflow:auto!important}.app.full-quote .workspace{display:block!important;grid-column:2!important;grid-row:1!important;min-width:0!important}.app.full-quote .paper{width:min(100%,900px)!important;min-height:0!important;margin:0 auto!important}}
 </style>
 </head>
 <body class="format-section">
@@ -239,7 +233,7 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
     </div>
     <div class="selected-preview-info"><div class="landing-eyebrow" id="selectedFormatLabel">SELECTED FORMAT · B</div><h2 id="selectedFormatTitle">Section Wise quotation</h2><p id="selectedFormatDescription">Products are grouped under section headings, with section totals and a final summary.</p><div class="feature-pills" id="selectedFormatFeatures"><span>Section headings</span><span>Section totals</span><span>Final summary</span></div><p class="mock-preview-note">Full-page A4-style sample preview. The final quotation will use your selected design and actual entered product data.</p></div>
   </div>
-  <div class="landing-bottom"><div class="landing-note"><b>What happens next?</b><br>Choose a design above, then click Create Quotation to open the full-page quotation with its editor docked on the left.</div></div>
+  <div class="landing-bottom"><div class="landing-note"><b>What happens next?</b><br>Choose a design above, then use the Create Quotation button beside the heading to open the editable quotation workspace.</div></div>
  </div>
 </section>
 
@@ -288,12 +282,6 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 3. Taxes are calculated as shown in this quotation.
 4. Quotation valid until the expiry date mentioned above.</textarea>
       <div class="actions"><button class="btn primary" onclick="renderQuote()">Update Preview</button><button class="btn" onclick="saveQuote()">Save Test Quote</button></div>
-    </section>
-    <section class="panel" id="sideColumnEditorPanel">
-      <h3>COLUMN EDITOR</h3>
-      <p class="mini-note">Add, remove, rename, reorder, or hide columns. Internal columns remain off the customer PDF. Formula setup can be added after you confirm the required calculations.</p>
-      <div class="actions"><button class="btn primary" onclick="colAdd(cols.length-1)">＋ Add column</button><button class="btn" onclick="openCols()">Advanced settings</button></div>
-      <div id="sideColList" class="side-col-list"></div>
     </section>
     <section class="panel" id="catalogPanel">
       <h3>PRODUCT CATALOGUE <span class="badge" id="catalogCount">8 demo items</span></h3>
@@ -351,7 +339,7 @@ function chooseLandingFormat(format){
  document.getElementById("mockSectionTitle").textContent=format==="classic"?"QUOTATION ITEMS":format==="premium"?"PROJECT SCOPE & ITEMS":"DUCTING";
  document.querySelector(".mock-second-section").style.display=format==="classic"?"none":"block";
 }
-function startCreate(){setFormat(landingFormat);document.getElementById("navPage").style.display="none";document.getElementById("landingPage").style.display="none";document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.innerText.replace(/\s+/g," ").trim()==="Create Quotation"));document.getElementById("appRoot").classList.add("editing","full-quote");document.querySelector(".editor").style.display="block";document.querySelector(".workspace").style.display="block";const btn=document.getElementById("fullPageCreateBtn");btn.textContent="Exit full page";btn.onclick=closeFullPageQuote;document.querySelector(".topbar p").textContent="Full-page quotation preview · Use the editor on the left to manage details and columns";renderSideCols();enableFullPageEditing();window.scrollTo(0,0);}
+function startCreate(){setFormat(landingFormat);document.getElementById("navPage").style.display="none";document.getElementById("landingPage").style.display="none";document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.innerText.replace(/\s+/g," ").trim()==="Create Quotation"));document.getElementById("appRoot").classList.add("editing");document.querySelector(".editor").style.display="block";document.querySelector(".workspace").style.display="block";window.scrollTo(0,0);}
 function openFullPageQuote(){
   const app=document.getElementById("appRoot");
   app.classList.add("full-quote");
@@ -364,7 +352,7 @@ function openFullPageQuote(){
 function closeFullPageQuote(){
   const app=document.getElementById("appRoot");
   app.classList.remove("full-quote");
-  const btn=document.getElementById("fullPageCreateBtn");btn.textContent="Full page view";btn.onclick=openFullPageQuote;
+  const btn=document.getElementById("fullPageCreateBtn");btn.textContent="Create";btn.onclick=openFullPageQuote;
   document.querySelector(".topbar p").textContent="Live A4 preview · Edit details or add products on the left";
   window.scrollTo(0,0);
 }
@@ -547,7 +535,7 @@ function exportPDF(){if(!window.jspdf){toast("PDF library could not load — che
  const pages=doc.getNumberOfPages();for(let p=1;p<=pages;p++){doc.setPage(p);doc.setFontSize(7);doc.setTextColor(120);doc.text("www.thebighotelstore.com",14,doc.internal.pageSize.getHeight()-7);doc.text("Page "+p+" of "+pages,W-14,doc.internal.pageSize.getHeight()-7,{align:"right"})}
  doc.save((val("quoteNo")||"quotation")+".pdf")}
 function exportHistory(){const h=JSON.parse(localStorage.getItem("tbhs_quotes")||"[]");const rows=[["Quotation No","Customer","Date","Expiry","Total","Saved At"],...h.map(q=>[q.quoteNo,q.customer,q.date,q.expiry,q.total,q.savedAt])];downloadFile("tbhs-quotation-history.csv","\ufeff"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n"),"text/csv;charset=utf-8")}
-applySettings();renderCatalogue();renderQuote();renderSideCols();
+applySettings();renderCatalogue();renderQuote();
 ["quoteNo","quoteDate","expiryDate","preparedBy","customerName","customerAddress","customerGST","contactPerson","customerMobile","customerEmail","partnerName","bankName","bankBranch","bankAccount","bankIFSC","orderBy","specifications","terms"].forEach(id=>document.getElementById(id).addEventListener("input",renderQuote));
 </script>
 <script>
@@ -585,8 +573,7 @@ function enableCellEditing(){const t=document.getElementById("itemsPreview");t.o
 function toggleInternal(){showInternal=!showInternal;document.getElementById("intBtn").classList.toggle("primary",showInternal);renderQuote()}
 function openCols(){renderColDlg();document.getElementById("colDlg").showModal()}
 function renderColDlg(){document.getElementById("colList").innerHTML=cols.map((c,i)=>`<div class="crow"><input value="${esc(c.label)}" onchange="colSet(${i},'label',this.value)"><select ${c.prot||c.type==="auto"?"disabled":""} onchange="colSet(${i},'type',this.value)">${["text","number","formula"].map(t=>`<option ${c.type===t?"selected":""}>${t}</option>`).join("")}${c.type==="auto"?"<option selected>auto</option>":""}</select>${c.type==="formula"?`<input value="${esc(c.f)}" title="Formula, e.g. qty*rate*(1-discount/100)" onchange="colSet(${i},'f',this.value)">`:"<span></span>"}<input type="number" min="2" max="40" value="${c.w}" title="Width weight" onchange="colSet(${i},'w',+this.value)"><label title="Internal = shown on screen only (👁 button). Never in PDF/print."><input type="checkbox" ${c.internal?"checked":""} onchange="colSet(${i},'internal',this.checked)"> internal</label><label><input type="checkbox" ${c.hidden?"checked":""} onchange="colSet(${i},'hidden',this.checked)"> hide</label><span><button onclick="colMove(${i},-1)">↑</button><button onclick="colMove(${i},1)">↓</button><button title="Insert column below" onclick="colAdd(${i})">＋</button>${c.prot?"":`<button onclick="colDel(${i})">✕</button>`}</span><small>key for formulas: <b>${c.key}</b></small></div>`).join("")}
-function renderSideCols(){const root=document.getElementById("sideColList");if(!root)return;root.innerHTML=cols.map((c,i)=>`<div class="side-col-row"><input type="text" aria-label="Column label" value="${esc(c.label)}" onchange="colSet(${i},'label',this.value)"><label title="Include in customer PDF"><input type="checkbox" ${!c.hidden&&!c.internal?"checked":""} onchange="colSet(${i},'hidden',!this.checked)">PDF</label><div class="col-controls"><button title="Move up" onclick="colMove(${i},-1)" ${i===0?"disabled":""}>↑</button><button title="Move down" onclick="colMove(${i},1)" ${i===cols.length-1?"disabled":""}>↓</button><button title="Insert after" onclick="colAdd(${i})">＋</button>${c.prot?"":`<button title="Remove column" onclick="colDel(${i})">−</button>`}</div></div>`).join("")+`<div class="side-col-foot">${cols.filter(c=>!c.hidden&&!c.internal).length} customer-visible · ${cols.filter(c=>c.internal).length} internal · column widths automatically rebalance</div>`}
-function colUpd(){saveCols();renderQuote();renderColDlg();renderSideCols()}
+function colUpd(){saveCols();renderQuote();renderColDlg()}
 function colSet(i,p,v){cols[i][p]=v;if(p==="type"&&v==="formula"&&!cols[i].f)cols[i].f="qty*rate";if(p==="f"&&!compileF(v))toast("Formula not valid — use column keys, + − * / ( )");colUpd()}
 function colMove(i,d){const j=i+d;if(j<0||j>=cols.length)return;[cols[i],cols[j]]=[cols[j],cols[i]];colUpd()}
 function colAdd(i){const n=prompt("New column name?");if(!n)return;let k=n.toLowerCase().replace(/[^a-z0-9]/g,"");if(!k||/^\d/.test(k)||MATHSET.has(k))k="c"+k;const b=k;let x=2;while(cols.some(c=>c.key===k))k=b+x++;cols.splice(i+1,0,{key:k,label:n,type:"text",w:8});colUpd()}
