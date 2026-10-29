@@ -202,6 +202,11 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 .app.studio .paper.land{width:min(100%,1700px)}.tbl-scroll::-webkit-scrollbar{height:9px}.tbl-scroll::-webkit-scrollbar-thumb{background:#c9a6a9;border-radius:6px}
 @media print{.tbl-scroll{overflow:visible}.items-table{min-width:0!important}}
 </style>
+<style>
+.quote-heading{justify-content:flex-end;margin:10px 0}
+.chipbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 10px;font-size:12px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 11px;font-size:12px;color:var(--muted)}.chip.on{background:#fff3c4;border-color:#d8b94a;color:#6b5200}.chip.add{background:var(--maroon);color:#fff;border-color:var(--maroon);font-weight:700}
+.app.studio .items-table td{padding:4px 5px}.app.studio .items-table tbody tr:hover td{background:#fff8f6}.app.studio .items-table td[data-field]:hover{box-shadow:inset 0 -2px 0 #e0b9bd;cursor:text}.app.studio .items-table td.icol,.app.studio .items-table tbody tr:hover td.icol{background:#fff3c4}
+</style>
 </head>
 <body class="format-section">
 <div class="app" id="appRoot">
@@ -332,7 +337,7 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 
   <main class="workspace">
     <div class="topbar">
-      <div class="studio-left"><button class="btn" onclick="backToFormats()">← Formats</button><div><h1 id="studioTitle">Quotation</h1><p>Double-click any table cell to edit · double-click a block to edit it in the panel</p></div></div>
+      <div class="studio-left"><button class="btn" onclick="backToFormats()">← Formats</button><div><h1 id="studioTitle">Quotation</h1><p>Click any table cell to edit · double-click a block to edit it in the panel</p></div></div>
       <div class="fmt-switch" id="fmtSwitch"><button data-f="classic" onclick="setFormat('classic')">A · Classic</button><button data-f="section" onclick="setFormat('section')">B · Section</button><button data-f="premium" onclick="setFormat('premium')">C · Premium</button></div>
       <div class="top-actions"><button class="btn" onclick="openCols()">⚙ Columns</button><button class="btn" id="intBtn" onclick="toggleInternal()" title="Show internal columns on screen">👁 Internal</button><button class="btn" onclick="togglePanel()">☰ Customize</button><span class="dl-label">Download</span><button class="btn primary" onclick="exportExcel()">Excel</button><button class="btn primary" onclick="exportPDF()">PDF</button><button class="btn primary" onclick="exportCSV()">CSV</button><button class="btn" onclick="window.print()">🖨</button><button class="btn" onclick="saveQuote()">💾 Save</button></div>
     </div>
@@ -342,12 +347,13 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
         <div class="company-info"><b>THE BIG HOTEL STORE</b><br>Branch / Address: Replace with official company details<br>Phone: Replace with official contact details<br>Email / Website: Replace with official details</div>
       </header>
       <div class="ribbon">FABRICATED & IMPORTED KITCHEN EQUIPMENT · HORECA · CHAFING & BUFFET DISPLAY</div>
-      <div class="quote-heading"><h2>QUOTATION</h2><div class="quote-meta" id="metaPreview"></div></div>
+      <div class="quote-heading"><div class="quote-meta" id="metaPreview"></div></div>
       <div class="parties">
         <section class="party"><h3>BILL TO</h3><div id="billPreview"></div></section>
         <section class="party"><h3>BILLING PARTNER</h3><div id="partnerPreview"></div></section>
       </div>
       <div class="spec"><b>Custom Items Specification</b><div id="specPreview"></div></div>
+      <div id="colChips" class="chipbar no-print"></div>
       <div id="itemsPreview"></div>
       <table class="final-totals" id="finalTotals"></table>
       <section class="terms"><b>TERMS & CONDITIONS</b><div id="termsPreview"></div></section>
@@ -554,9 +560,9 @@ function exportExcel(){if(typeof XLSX==="undefined"){toast("Excel library could 
 function exportPDF(){if(!window.jspdf){toast("PDF library could not load — check internet connection");return}const {jsPDF}=window.jspdf,doc=new jsPDF({unit:"mm",format:LAY.paper||"a4",orientation:isLand()?"landscape":"portrait"}),W=doc.internal.pageSize.getWidth(),t=computeTotals();
  const rs=n=>"Rs. "+(Number(n)||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
  doc.setFillColor(...accRGB());doc.rect(0,0,W,24,"F");doc.setTextColor(255);doc.setFont("helvetica","bold");doc.setFontSize(16);doc.text("THE BIG HOTEL STORE",14,12);doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text("HOTELWARE - KITCHEN EQUIPMENT - HOSPITALITY SOLUTIONS",14,18);
- doc.setTextColor(...accRGB());doc.setFont("helvetica","bold");doc.setFontSize(20);doc.text("QUOTATION",14,36);
+ 
  doc.setTextColor(48,40,42);doc.setFontSize(9);doc.setFont("helvetica","normal");
- doc.text(["Quotation No: "+val("quoteNo"),"Date: "+val("quoteDate"),"Valid Until: "+val("expiryDate")],W-14,31,{align:"right"});
+ doc.setFont("helvetica","bold");doc.text("Quotation No: "+val("quoteNo")+"      Date: "+val("quoteDate")+"      Valid Until: "+val("expiryDate"),14,33);doc.setFont("helvetica","normal");
  doc.setFont("helvetica","bold");doc.text("BILL TO",14,46);doc.setFont("helvetica","normal");
  doc.text(doc.splitTextToSize([val("customerName"),val("customerAddress"),"GSTIN: "+(val("customerGST")||"-"),"Contact: "+(val("contactPerson")||"-")+" "+val("customerMobile"),"Email: "+(val("customerEmail")||"-")].join("\n"),90),14,51);
  doc.setFont("helvetica","bold");doc.text("PREPARED BY / PARTNER",110,46);doc.setFont("helvetica","normal");
@@ -576,25 +582,26 @@ applySettings();renderCatalogue();renderQuote();
 const DEFAULT_COLS=[
 {key:"sr",label:"Sr. No.",type:"auto",w:3},{key:"code",label:"Item Code",type:"text",w:7},{key:"qty",label:"Qty",type:"number",w:4,prot:1},{key:"unit",label:"Unit",type:"text",w:4},
 {key:"name",label:"Particulars",type:"text",w:16,prot:1},{key:"type",label:"Type",type:"text",w:6},{key:"image",label:"Image",type:"image",w:7},{key:"brand",label:"Make",type:"text",w:6},{key:"model",label:"Model",type:"text",w:7},
-{key:"sizeL",label:"Size (Length)",type:"text",w:5},{key:"sizeW",label:"Size (Width)",type:"text",w:5},{key:"sizeH",label:"Size (Height)",type:"text",w:5},
-{key:"incpct",label:"Increased %",type:"number",w:5,fmt:"pct"},{key:"hwrate",label:"Increased H.W Rate",type:"formula",f:"rate*(1+incpct/100)",w:7,fmt:"money"},
-{key:"rbd",label:"Rate before Discount",type:"formula",f:"hwrate",w:7,fmt:"money"},{key:"rate",label:"Rate",type:"number",w:7,fmt:"money",prot:1},
+{key:"sizeL",label:"Size (Length)",type:"text",w:5,internal:1,grp:"size"},{key:"sizeW",label:"Size (Width)",type:"text",w:5,internal:1,grp:"size"},{key:"sizeH",label:"Size (Height)",type:"text",w:5,internal:1,grp:"size"},
+{key:"hw",label:"H.W Rate",type:"number",w:6,fmt:"money",internal:1,grp:"pricing"},
+{key:"incpct",label:"Increased %",type:"number",w:5,fmt:"pct",internal:1,grp:"pricing"},{key:"hwrate",label:"Increased H.W Rate",type:"formula",f:"hw*(1+incpct/100)",w:7,fmt:"money",internal:1,grp:"pricing"},
+{key:"rbd",label:"Rate before Discount",type:"formula",f:"rate-hw+hwrate",w:7,fmt:"money",internal:1,grp:"pricing"},{key:"rate",label:"Rate",type:"number",w:7,fmt:"money",prot:1},
 {key:"discount",label:"Discount",type:"number",w:5,fmt:"pct"},{key:"drate",label:"Discounted Rate",type:"formula",f:"rbd*(1-discount/100)",w:7,fmt:"money"},
-{key:"adddisc",label:"Additional Discount",type:"number",w:6,fmt:"pct"},{key:"billrate",label:"Billing Rate",type:"formula",f:"drate*(1-adddisc/100)",w:7,fmt:"money"},
+{key:"adddisc",label:"Additional Discount",type:"number",w:6,fmt:"pct",internal:1,grp:"pricing"},{key:"billrate",label:"Billing Rate",type:"formula",f:"drate*(1-adddisc/100)",w:7,fmt:"money",internal:1,grp:"pricing"},
 {key:"amount",label:"Amount",type:"formula",f:"qty*billrate",w:8,fmt:"money",isAmount:1,prot:1},{key:"gst",label:"GST %",type:"number",w:4,fmt:"pctint",prot:1},
-{key:"gstamt",label:"GST Amount",type:"formula",f:"amount*gst/100",w:7,fmt:"money"},{key:"total",label:"Total Amount",type:"formula",f:"amount+gstamt",w:8,fmt:"money"},
-{key:"adddiff",label:"Additional Difference",type:"formula",f:"qty*(drate-billrate)",w:7,fmt:"money"}];
+{key:"gstamt",label:"GST Amount",type:"formula",f:"amount*gst/100",w:7,fmt:"money",internal:1,grp:"totals"},{key:"total",label:"Total Amount",type:"formula",f:"amount+gstamt",w:8,fmt:"money",internal:1,grp:"totals"},
+{key:"adddiff",label:"Additional Difference",type:"formula",f:"qty*(drate-billrate)",w:7,fmt:"money",internal:1,grp:"totals"}];
 const clone=o=>JSON.parse(JSON.stringify(o));
-let cols;try{cols=JSON.parse(localStorage.getItem("tbhs_cols2"))}catch(e){}
+let cols;try{cols=JSON.parse(localStorage.getItem("tbhs_cols3"))}catch(e){}
 if(!Array.isArray(cols)||!cols.length)cols=clone(DEFAULT_COLS);
-let showInternal=false,printing=false,uid=0;
-const saveCols=()=>{try{localStorage.setItem("tbhs_cols2",JSON.stringify(cols))}catch(e){}};
+let showInternal=false,printing=false,uid=0;const showGrp={};
+const saveCols=()=>{try{localStorage.setItem("tbhs_cols3",JSON.stringify(cols))}catch(e){}};
 const FC=new Map(),MATHSET=new Set(["round","min","max","abs","ceil","floor"]);
 function compileF(f){if(FC.has(f))return FC.get(f);let fn=null;try{if(/[^\w\s.+\-*/%(),<>=!&|?:]/.test(f)||/\.\s*[A-Za-z_]/.test(f))throw 0;const s=f.replace(/[A-Za-z_]\w*/g,(m,o,str)=>MATHSET.has(m)&&/^\s*\(/.test(str.slice(o+m.length))?"Math."+m:`V("${m}")`);fn=new Function("V","return ("+s+")")}catch(e){}FC.set(f,fn);return fn}
 function cv(i,key,d=0){const c=cols.find(x=>x.key===key);if(!c||c.type!=="formula")return num(i[key]);if(d>8)return 0;const fn=compileF(c.f||"0");if(!fn)return 0;try{return num(fn(k=>cv(i,k,d+1)))}catch(e){return 0}}
 function itemNet(i){const a=cols.find(c=>c.isAmount);return a?cv(i,a.key):num(i.qty)*num(i.rate)*(1-num(i.discount)/100)}
 function itemGST(i){return itemNet(i)*num(i.gst)/100}
-const outCols=pdf=>cols.filter(c=>!c.hidden&&(pdf?!c.internal:(!c.internal||showInternal)));
+const outCols=pdf=>cols.filter(c=>!c.hidden&&(pdf?!c.internal:(!c.internal||showInternal||showGrp[c.grp||"other"])));
 function cellVal(i,c,idx){if(c.type==="auto")return idx+1;if(c.type==="image")return i.image?"[image]":"";if(c.type==="formula")return +cv(i,c.key).toFixed(2);return c.type==="number"?num(i[c.key]):(i[c.key]??"")}
 function fmtVal(v,c){if(c.type==="text"||c.type==="auto"||v==="")return String(v);if(c.fmt==="pct")return (+v).toFixed(1)+"%";if(c.fmt==="pctint")return v+"%";if(c.fmt==="money"||c.type==="formula")return (+v).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});return String(v)}
 const _rq=renderQuote;
@@ -692,10 +699,20 @@ const sizeParts=z=>{z=String(z||"");const p=/[x×*]/i.test(z)?z.split(/\s*[x×*]
 const migrate=()=>items.forEach(i=>{if(i.size&&i.sizeL===undefined)Object.assign(i,sizeParts(i.size))});
 function pickImage(id){const inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.onchange=()=>{const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,200/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);const it=items.find(z=>String(z.id)===String(id));if(it){it.image=c.toDataURL("image/jpeg",.8);renderQuote()}};im.src=r.result};r.readAsDataURL(f)};inp.click()}
 function delImg(id){const it=items.find(z=>String(z.id)===String(id));if(it){it.image="";renderQuote()}}
-const _ece=enableCellEditing;enableCellEditing=function(){_ece();const t=document.getElementById("itemsPreview"),prev=t.ondblclick;t.ondblclick=e=>{const td=e.target.closest("td[data-img]");if(td){pickImage(td.dataset.img);return}prev&&prev(e)};t.onclick=e=>{if(e.target.closest(".img-x"))return;const a=e.target.closest(".img-add");if(a)pickImage(a.closest("td").dataset.img)}};
+const _ece=enableCellEditing;enableCellEditing=function(){_ece();const t=document.getElementById("itemsPreview"),prev=t.ondblclick;t.ondblclick=e=>{const td=e.target.closest("td[data-img]");if(td){pickImage(td.dataset.img);return}prev&&prev(e)};t.onclick=e=>{if(e.target.closest(".img-x"))return;const a=e.target.closest(".img-add");if(a){pickImage(a.closest("td").dataset.img);return}const f=e.target.closest("td[data-field]");if(f&&!f.isContentEditable&&t.ondblclick)t.ondblclick(e)}};
 const _al=applyLay;applyLay=function(){_al();document.getElementById("paper").classList.toggle("land",isLand())};
 const _rq3=renderQuote;renderQuote=function(){migrate();_rq3()};
 migrate();renderQuote();
+</script>
+<script>
+/* ===== v6: clean editing view (column groups) ===== */
+const GRP={size:"Sizes",pricing:"Rate workings",totals:"GST / totals / difference",other:"Other internal"};
+cols.forEach(c=>{if(c.internal&&!c.grp)c.grp="other"});
+function toggleGrp(g){if(showInternal){showInternal=false;document.getElementById("intBtn").classList.remove("primary");Object.keys(GRP).forEach(k=>showGrp[k]=k!==g)}else showGrp[g]=!showGrp[g];renderQuote()}
+function addBlank(){const last=items.length?items[items.length-1].section:"General";items.push({id:Date.now()+Math.random(),section:last,code:"",name:"New product",brand:"",model:"",type:"",sizeL:"",sizeW:"",sizeH:"",qty:1,unit:"PCS",rate:0,discount:0,gst:num(val("defaultGST"))});renderQuote()}
+function drawChips(){const el=document.getElementById("colChips");if(!el)return;const g=Object.keys(GRP).filter(k=>cols.some(c=>c.internal&&!c.hidden&&(c.grp||"other")===k));el.innerHTML='<b>Editing view</b><span class="chip on" style="background:#fff;border-color:var(--line);color:var(--ink);cursor:default">Customer columns</span>'+g.map(k=>{const on=showGrp[k]||showInternal,n=cols.filter(c=>c.internal&&!c.hidden&&(c.grp||"other")===k).length;return `<button class="chip ${on?"on":""}" onclick="toggleGrp('${k}')">${on?"✓":"＋"} ${GRP[k]} (${n})</button>`}).join("")+'<small style="color:var(--muted)">Yellow = internal, never printed in the PDF</small><span style="flex:1"></span><button class="chip add" onclick="addBlank()">＋ Add line</button>'}
+const _rq4=renderQuote;renderQuote=function(){_rq4();drawChips()};
+renderQuote();
 </script>
 </body>
 </html>
