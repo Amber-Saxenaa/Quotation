@@ -223,6 +223,14 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 .items-table .sel{outline:2px solid #5b7399;outline-offset:-2px}.items-table td.dragover{outline:2px dashed #5b7399;background:#eaf0fb}.items-table th[data-col]{cursor:pointer}
 @media print{.items-table .sel{outline:none!important}}
 </style>
+<style>
+.quote-heading{display:none}.party:nth-child(2),.party:nth-child(2) .kv{text-align:left}.kv b{min-width:100px}.kv span:last-child{min-height:1em}
+.paper .ribbon{font-size:calc(10px*var(--sz-all,1))}.paper .company-info,.paper .paper-foot,.paper .signature{font-size:calc(11px*var(--sz-all,1))}
+.paper.land .paper-head{flex-direction:column;align-items:center;text-align:center;gap:6px}.paper.land .paper-head .logo{justify-content:center}.paper.land .company-info{text-align:center}
+.defbox{display:flex;flex-direction:column;gap:6px;border:1px solid #c9d3ea;background:#f3f6fc;border-radius:10px;padding:10px;margin-top:12px}.defbox small{color:var(--muted);font-size:11px;line-height:1.4}
+.items-table th{user-select:none}
+.mock-head{justify-content:center!important}.mock-company{display:none}.mock-logo-img{height:clamp(28px,3.6vw,50px);width:auto}.mock-parties>div span{display:block}.mock-parties i{font-style:normal;font-weight:700}
+</style>
 </head>
 <body class="format-section">
 <div class="app" id="appRoot">
@@ -255,10 +263,9 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
   </div>
   <div class="selected-preview" id="selectedFormatPreview">
     <div class="preview-paper" id="landingQuotePaper">
-      <div class="mock-head"><div class="mock-brand"><div class="mock-logo">TBHS</div><div><b>THE BIG HOTEL STORE</b><small>HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS</small></div></div><div class="mock-company">www.thebighotelstore.com<br>Sales &amp; Project Solutions<br>India</div></div>
-      <div class="mock-ribbon">QUOTATION</div>
-      <div class="mock-quotehead"><h3>QUOTATION</h3><div><b>Quotation No.</b> QT-TBHS-EQP-000001<br><b>Date</b> 26-10-2026<br><b>Valid Until</b> 09-11-2026</div></div>
-      <div class="mock-parties"><div><b>CUSTOMER DETAILS</b><strong>Sample Hotel &amp; Resort</strong><span>Lucknow, Uttar Pradesh</span><span>GSTIN: Customer GSTIN</span><span>Contact: Customer Name</span></div><div><b>SUPPLIER DETAILS</b><strong>The Big Hotel Store</strong><span>Hotelware &amp; Kitchen Equipment</span><span>Prepared by: Employee Name</span><span>Reference: Project quotation</span></div></div>
+      <div class="mock-head"><div class="mock-brand"><img class="mock-logo-img" alt="TBHS"><div><b>THE BIG HOTEL STORE</b><small>HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS</small></div></div><div class="mock-company">www.thebighotelstore.com<br>Sales &amp; Project Solutions<br>India</div></div>
+      <div class="mock-ribbon">FABRICATED &amp; IMPORTED KITCHEN EQUIPMENT · HORECA · CHAFING &amp; BUFFET DISPLAY</div>
+            <div class="mock-parties"><div><b>BILLING DETAILS</b><span><i>Quotation No</i> : QT-TBHS-EQP-000001</span><span><i>Date</i> : 26-10-2026</span><span><i>Valid Until</i> : 09-11-2026</span><span><i>Customer Name</i> : Sample Hotel &amp; Resort</span><span><i>Address</i> : Lucknow, Uttar Pradesh</span><span><i>GSTIN</i> :</span><span><i>Contact</i> :</span><span><i>Email</i> :</span></div><div><b>BILLING PARTNER</b><span><i>Partner Name</i> : The Big Hotel Store</span><span><i>Bank</i> :</span><span><i>Branch</i> :</span><span><i>A/C No</i> :</span><span><i>IFSC</i> :</span><span><i>Order By</i> :</span><span><i>Prepared By</i> : Employee Name</span></div></div>
       <div class="mock-intro">Dear Sir/Madam,<br>Please find below our quotation for the listed products and services.</div>
       <div class="mock-section-title" id="mockSectionTitle">DUCTING</div>
       <table class="mock-items"><thead><tr><th>S.No.</th><th>Item description</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody>
@@ -320,6 +327,7 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
       <label>Paper size (PDF)</label><select id="layPaper" onchange="laySet('paper',this.value)"><option value="a4">A4 (standard)</option><option value="a3">A3 (more room for many columns)</option></select>
       <label>Show on quotation</label>
       <div class="chk-grid"><label><input type="checkbox" data-k="head" checked onchange="layHide('head',!this.checked)"> Letterhead</label><label><input type="checkbox" data-k="ribbon" checked onchange="layHide('ribbon',!this.checked)"> Ribbon</label><label><input type="checkbox" data-k="parties" checked onchange="layHide('parties',!this.checked)"> Bill to / partner</label><label><input type="checkbox" data-k="spec" checked onchange="layHide('spec',!this.checked)"> Specification</label><label><input type="checkbox" data-k="terms" checked onchange="layHide('terms',!this.checked)"> Terms</label><label><input type="checkbox" data-k="sign" checked onchange="layHide('sign',!this.checked)"> Signatures</label><label><input type="checkbox" data-k="foot" checked onchange="layHide('foot',!this.checked)"> Footer</label></div>
+      <div class="defbox"><b>Defaults for all formats</b><small>Layout, text sizes and column styles apply to formats A, B and C alike. Save them as your default to come back to them any time.</small><button class="btn primary" onclick="saveDefaults()">⭐ Save current as default</button><button class="btn" onclick="restoreDefaults()">↺ Back to my default</button><button class="btn" onclick="factoryReset()">Factory settings</button></div>
       <div class="actions"><button class="btn" onclick="openCols()">⚙ Edit columns</button></div>
     </section>
     <section class="panel">
@@ -366,12 +374,12 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
       <div class="ribbon">FABRICATED & IMPORTED KITCHEN EQUIPMENT · HORECA · CHAFING & BUFFET DISPLAY</div>
       <div class="quote-heading"><div class="quote-meta" id="metaPreview"></div></div>
       <div class="parties">
-        <section class="party"><h3>BILL TO</h3><div id="billPreview"></div></section>
+        <section class="party"><h3>BILLING DETAILS</h3><div id="billPreview"></div></section>
         <section class="party"><h3>BILLING PARTNER</h3><div id="partnerPreview"></div></section>
       </div>
       <div class="spec"><b>Custom Items Specification</b><div id="specPreview"></div></div>
       <div id="colChips" class="chipbar no-print"></div>
-      <div id="fmtBar" class="fmtbar no-print" style="display:none"><b id="fmtTarget">—</b><label>Size <button onclick="stStep(-10)">−</button><output id="fmtSize">100%</output><button onclick="stStep(10)">＋</button></label><label>Colour <input type="color" id="fmtColor" value="#222222" oninput="stSet('color',this.value)"></label><label><input type="checkbox" id="fmtBold" onchange="stSet('bold',this.checked)"> Bold</label><select id="fmtScope" onchange="updFmtBar()"><option value="body">Applies to: cells</option><option value="head">Applies to: header</option></select><button id="fmtToCol" onclick="selectTarget({t:'col',key:sel.key})">Select whole column</button><button onclick="stClear()">Reset</button><button onclick="selClear()">✕</button></div>
+      <div id="fmtBar" class="fmtbar no-print" style="display:none"><b id="fmtTarget">—</b><label>Size <button onclick="stStep(-10)">−</button><output id="fmtSize">100%</output><button onclick="stStep(10)">＋</button></label><label>Colour <input type="color" id="fmtColor" value="#222222" oninput="stSet('color',this.value)"></label><label><input type="checkbox" id="fmtBold" onchange="stSet('bold',this.checked)"> Bold</label><select id="fmtScope" onchange="updFmtBar()"><option value="body">Applies to: cells</option><option value="head">Applies to: header</option></select><button id="fmtToCol" onclick="cellsToCols()">Select whole column</button><button onclick="stClear()">Reset</button><button onclick="selClear()">✕</button></div>
       <div id="itemsPreview"></div>
       <table class="final-totals" id="finalTotals"></table>
       <section class="terms"><b>TERMS & CONDITIONS</b><div id="termsPreview"></div></section>
@@ -580,7 +588,8 @@ function exportPDF(){if(!window.jspdf){toast("PDF library could not load — che
  const H=doc.internal.pageSize.getHeight();
  let y=pdfTop(doc,W);const spec=LAY.hide.spec?"":val("specifications");if(spec){doc.setFont("helvetica","bold");doc.setFontSize(9*eff("head"));doc.text("Specifications",14,y);const nf=8*eff("notes"),lh=nf*.3528*1.35;doc.setFont("helvetica","normal");doc.setFontSize(nf);const l=doc.splitTextToSize(spec,W-28);doc.text(l,14,y+lh+1.5);y+=lh*l.length+8}
  pdfItemsTable(doc,y,W);
- doc.autoTable({startY:doc.lastAutoTable.finalY+6,body:[["Total Basic",rs(t.basic)],["Global Discount ("+t.pct+"%)","- "+rs(t.disc)],["GST",rs(t.gst)],["GRAND TOTAL",rs(t.total)]],theme:"grid",styles:{fontSize:9*eff("totals")},columnStyles:{1:{halign:"right"}},tableWidth:90,margin:{left:W-104,bottom:18},didParseCell:d=>{if(d.row.index===3){d.cell.styles.fillColor=accRGB();d.cell.styles.textColor=255;d.cell.styles.fontStyle="bold"}}});
+ let ty0=doc.lastAutoTable.finalY+6;if(ty0+4*(9*eff("totals")*.3528*1.15+4.4)>H-18){doc.addPage();ty0=20}
+ doc.autoTable({startY:ty0,body:[["Total Basic",rs(t.basic)],["Global Discount ("+t.pct+"%)","- "+rs(t.disc)],["GST",rs(t.gst)],["GRAND TOTAL",rs(t.total)]],theme:"grid",styles:{fontSize:9*eff("totals")},columnStyles:{1:{halign:"right"}},tableWidth:90,margin:{left:W-104,bottom:18},didParseCell:d=>{if(d.row.index===3){d.cell.styles.fillColor=accRGB();d.cell.styles.textColor=255;d.cell.styles.fontStyle="bold"}}});
  let ty=doc.lastAutoTable.finalY+10;if(ty>doc.internal.pageSize.getHeight()-42){doc.addPage();ty=20}const tn=8*eff("notes"),tlh=tn*.3528*1.35;doc.setFont("helvetica","bold");doc.setFontSize(9*eff("head"));doc.text(termsTxt()?"TERMS & CONDITIONS":"",14,ty);doc.setFont("helvetica","normal");doc.setFontSize(tn);const tl=doc.splitTextToSize(termsTxt(),W-28);let yy=ty+tlh+1.5;tl.forEach(ln=>{if(yy>H-18){doc.addPage();yy=20}doc.text(ln,14,yy);yy+=tlh});
  const pages=doc.getNumberOfPages();for(let p=1;p<=pages;p++){doc.setPage(p);doc.setDrawColor(200);doc.setLineWidth(.2);doc.line(14,H-14,W-14,H-14);doc.addImage(TBHS_LOGO,"JPEG",14,H-12.5,5.5*TBHS_AR,5.5);doc.setFontSize(7);doc.setTextColor(120);doc.text("www.thebighotelstore.com",14+5.5*TBHS_AR+2,H-8.8);doc.text("Page "+p+" of "+pages,W-14,H-8.8,{align:"right"})}
  doc.save((val("quoteNo")||"quotation")+".pdf")}
@@ -591,7 +600,7 @@ applySettings();renderCatalogue();renderQuote();
 <script>
 /* ===== v3: column engine, catalogue import, auto-fit exports ===== */
 const DEFAULT_COLS=[
-{key:"sr",label:"Sr. No.",type:"auto",w:3},{key:"code",label:"Item Code",type:"text",w:7},{key:"qty",label:"Qty",type:"number",w:4,prot:1},{key:"unit",label:"Unit",type:"text",w:4},
+{key:"sr",label:"Sr. No.",type:"auto",w:3},{key:"code",label:"Item Code",type:"text",w:10},{key:"qty",label:"Qty",type:"number",w:4,prot:1},{key:"unit",label:"Unit",type:"text",w:4},
 {key:"name",label:"Particulars",type:"text",w:16,prot:1},{key:"type",label:"Type",type:"text",w:6},{key:"image",label:"Image",type:"image",w:7},{key:"brand",label:"Make",type:"text",w:6},{key:"model",label:"Model",type:"text",w:7},
 {key:"sizeL",label:"Size (Length)",type:"text",w:5,internal:1,grp:"size"},{key:"sizeW",label:"Size (Width)",type:"text",w:5,internal:1,grp:"size"},{key:"sizeH",label:"Size (Height)",type:"text",w:5,internal:1,grp:"size"},
 {key:"hw",label:"H.W Rate",type:"number",w:6,fmt:"money",internal:1,grp:"pricing"},
@@ -604,8 +613,10 @@ const DEFAULT_COLS=[
 {key:"adddiff",label:"Additional Difference",type:"formula",f:"qty*(drate-billrate)",w:7,fmt:"money",internal:1,grp:"totals"}];
 const clone=o=>JSON.parse(JSON.stringify(o));
 let cols;try{cols=JSON.parse(localStorage.getItem("tbhs_cols3"))}catch(e){}
+if(!Array.isArray(cols)||!cols.length){try{cols=(JSON.parse(localStorage.getItem("tbhs_defaults"))||{}).cols}catch(e){}}
 if(!Array.isArray(cols)||!cols.length)cols=clone(DEFAULT_COLS);
-let showInternal=false,printing=false,uid=0;const showGrp={};
+cols.forEach(c=>{if(c.key==="code"&&c.w===7&&!c._m1){c.w=10;c._m1=1}});
+let showInternal=false,printing=false,uid=0;const showGrp={};let multi=false;
 const saveCols=()=>{try{localStorage.setItem("tbhs_cols3",JSON.stringify(cols))}catch(e){}};
 const FC=new Map(),MATHSET=new Set(["round","min","max","abs","ceil","floor"]);
 function compileF(f){if(FC.has(f))return FC.get(f);let fn=null;try{if(/[^\w\s.+\-*/%(),<>=!&|?:]/.test(f)||/\.\s*[A-Za-z_]/.test(f))throw 0;const s=f.replace(/[A-Za-z_]\w*/g,(m,o,str)=>MATHSET.has(m)&&/^\s*\(/.test(str.slice(o+m.length))?"Math."+m:`V("${m}")`);fn=new Function("V","return ("+s+")")}catch(e){}FC.set(f,fn);return fn}
@@ -677,12 +688,14 @@ renderCatalogue();
 <script>
 /* ===== v4: full-page studio ===== */
 function setFormat(f){currentFormat=f;document.body.className="format-"+f;const sel=document.getElementById("formatSelect");if(sel)sel.value=f;renderQuote()}
-let LAY=Object.assign({accent:"#641d25",tscale:1,orient:"landscape",paper:"a4",hide:{}},(()=>{try{return JSON.parse(localStorage.getItem("tbhs_layout"))||{}}catch(e){return{}}})());LAY.hide=LAY.hide||{};LAY.sz=Object.assign({master:1,company:1,head:1,text:1,notes:1,thead:1,body:1,totals:1},LAY.sz||{});const eff=k=>(LAY.sz.master||1)*(LAY.sz[k]||1);
+const FACTORY_SZ={master:1.25,company:1,head:1,text:1,notes:1,thead:1,body:1,totals:1};
+const FACTORY={accent:"#641d25",tscale:1,orient:"landscape",paper:"a4",hide:{},sz:FACTORY_SZ};
+let LAY=Object.assign(JSON.parse(JSON.stringify(FACTORY)),(()=>{try{return JSON.parse(localStorage.getItem("tbhs_layout2"))||(JSON.parse(localStorage.getItem("tbhs_defaults"))||{}).lay||{}}catch(e){return{}}})());LAY.hide=LAY.hide||{};LAY.sz=Object.assign({},FACTORY_SZ,LAY.sz||{});const eff=k=>(LAY.sz.master||1)*(LAY.sz[k]||1);
 const HIDE={head:1,ribbon:1,parties:1,spec:1,terms:1,sign:1,foot:1};
 const isLand=()=>LAY.orient==="auto"?outCols(true).length>8:LAY.orient==="landscape";
 const accRGB=()=>[1,3,5].map(i=>parseInt(LAY.accent.substr(i,2),16)||0);
 const termsTxt=()=>LAY.hide.terms?"":val("terms");
-const layStore=()=>{try{localStorage.setItem("tbhs_layout",JSON.stringify(LAY))}catch(e){}};
+const layStore=()=>{try{localStorage.setItem("tbhs_layout2",JSON.stringify(LAY))}catch(e){}};
 function applyLay(){const p=document.getElementById("paper");p.style.setProperty("--maroon",LAY.accent);p.style.setProperty("--red","color-mix(in srgb,"+LAY.accent+" 85%,#fff)");Object.keys(HIDE).forEach(k=>p.classList.toggle("hide-"+k,!!LAY.hide[k]))}
 function laySet(k,v){LAY[k]=v;layStore();renderQuote()}
 function layHide(k,h){LAY.hide[k]=h;layStore();renderQuote()}
@@ -710,7 +723,7 @@ const sizeParts=z=>{z=String(z||"");const p=/[x×*]/i.test(z)?z.split(/\s*[x×*]
 const migrate=()=>items.forEach(i=>{if(i.size&&i.sizeL===undefined)Object.assign(i,sizeParts(i.size))});
 function pickImage(id){const inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.onchange=()=>{const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,200/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);const it=items.find(z=>String(z.id)===String(id));if(it){it.image=c.toDataURL("image/jpeg",.8);renderQuote()}};im.src=r.result};r.readAsDataURL(f)};inp.click()}
 function delImg(id){const it=items.find(z=>String(z.id)===String(id));if(it){it.image="";renderQuote()}}
-const _ece=enableCellEditing;enableCellEditing=function(){_ece();const t=document.getElementById("itemsPreview"),prev=t.ondblclick;t.ondblclick=e=>{const td=e.target.closest("td[data-img]");if(td){pickImage(td.dataset.img);return}prev&&prev(e)};t.onclick=e=>{if(e.target.closest(".img-x"))return;const a=e.target.closest(".img-add");if(a){pickImage(a.closest("td").dataset.img);return}const f=e.target.closest("td[data-field]");if(f&&!f.isContentEditable&&t.ondblclick)t.ondblclick(e)}};
+const _ece=enableCellEditing;enableCellEditing=function(){_ece();const t=document.getElementById("itemsPreview"),prev=t.ondblclick;t.ondblclick=e=>{const td=e.target.closest("td[data-img]");if(td){pickImage(td.dataset.img);return}prev&&prev(e)};t.onclick=e=>{if(e.target.closest(".img-x"))return;const a=e.target.closest(".img-add");if(a){pickImage(a.closest("td").dataset.img);return}const f=e.target.closest("td[data-field]");if(f&&!f.isContentEditable&&!(e.ctrlKey||e.metaKey||e.shiftKey||multi)&&t.ondblclick)t.ondblclick(e)}};
 const _al=applyLay;applyLay=function(){_al();document.getElementById("paper").classList.toggle("land",isLand())};
 const _rq3=renderQuote;renderQuote=function(){migrate();_rq3()};
 migrate();renderQuote();
@@ -721,7 +734,7 @@ const GRP={size:"Sizes",pricing:"Rate workings",totals:"GST / totals / differenc
 cols.forEach(c=>{if(c.internal&&!c.grp)c.grp="other"});
 function toggleGrp(g){if(showInternal){showInternal=false;document.getElementById("intBtn").classList.remove("primary");Object.keys(GRP).forEach(k=>showGrp[k]=k!==g)}else showGrp[g]=!showGrp[g];renderQuote()}
 function addBlank(){const last=items.length?items[items.length-1].section:"General";items.push({id:Date.now()+Math.random(),section:last,code:"",name:"New product",brand:"",model:"",type:"",sizeL:"",sizeW:"",sizeH:"",qty:1,unit:"PCS",rate:0,discount:0,gst:num(val("defaultGST"))});renderQuote()}
-function drawChips(){const el=document.getElementById("colChips");if(!el)return;const g=Object.keys(GRP).filter(k=>cols.some(c=>c.internal&&!c.hidden&&(c.grp||"other")===k));el.innerHTML='<b>Editing view</b><span class="chip on" style="background:#fff;border-color:var(--line);color:var(--ink);cursor:default">Customer columns</span>'+g.map(k=>{const on=showGrp[k]||showInternal,n=cols.filter(c=>c.internal&&!c.hidden&&(c.grp||"other")===k).length;return `<button class="chip ${on?"on":""}" onclick="toggleGrp('${k}')">${on?"✓":"＋"} ${GRP[k]} (${n})</button>`}).join("")+'<small style="color:var(--muted)">Blue-grey = internal, never printed in the PDF</small><span style="flex:1"></span><button class="chip add" onclick="addBlank()">＋ Add line</button>'}
+function drawChips(){const el=document.getElementById("colChips");if(!el)return;const g=Object.keys(GRP).filter(k=>cols.some(c=>c.internal&&!c.hidden&&(c.grp||"other")===k));el.innerHTML='<b>Editing view</b><span class="chip on" style="background:#fff;border-color:var(--line);color:var(--ink);cursor:default">Customer columns</span>'+g.map(k=>{const on=showGrp[k]||showInternal,n=cols.filter(c=>c.internal&&!c.hidden&&(c.grp||"other")===k).length;return `<button class="chip ${on?"on":""}" onclick="toggleGrp('${k}')">${on?"✓":"＋"} ${GRP[k]} (${n})</button>`}).join("")+'<small style="color:var(--muted)">Blue-grey = internal, never printed in the PDF</small><button class="chip ${multi?"on":""}" onclick="toggleMulti()" title="Click headers or cells to add them to the selection. Ctrl or Shift + click also works.">${multi?"☑":"☐"} Multi-select</button><button class="chip" onclick="selectAllCols()">Select all columns</button><span style="flex:1"></span><button class="chip add" onclick="addBlank()">＋ Add line</button>'}
 const _rq4=renderQuote;renderQuote=function(){_rq4();drawChips()};
 renderQuote();
 </script>
@@ -732,44 +745,48 @@ document.querySelectorAll(".logo-img").forEach(i=>i.src=TBHS_LOGO);
 <script>
 /* ===== v8: text sizes, cell/column styling, drag&drop images, labelled bill-to ===== */
 const hex2rgb=h=>[1,3,5].map(i=>parseInt(String(h).substr(i,2),16)||0);
-function pdfTop(doc,W){const ink=[48,40,42];let y=8;
- if(!LAY.hide.head){const lh=22,lw=lh*TBHS_AR,x0=14+lw+5,av=W-14-x0,nm="THE BIG HOTEL STORE",tg="HOTELWARE - KITCHEN EQUIPMENT - HOSPITALITY SOLUTIONS";
-  doc.addImage(TBHS_LOGO,"JPEG",14,6,lw,lh);doc.setFont("helvetica","bold");doc.setFontSize(10);const w10=doc.getTextWidth(nm);
+function pdfTop(doc,W){const ink=[48,40,42],CW=W-28,land=W>doc.internal.pageSize.getHeight();let y=8;
+ if(!LAY.hide.head){const lh=22,lw=lh*TBHS_AR,gw=land?CW*.8:CW,gx=14+(CW-gw)/2,x0=gx+lw+5,av=gw-lw-5,nm="THE BIG HOTEL STORE",tg="HOTELWARE - KITCHEN EQUIPMENT - HOSPITALITY SOLUTIONS";
+  doc.addImage(TBHS_LOGO,"JPEG",gx,6,lw,lh);doc.setFont("helvetica","bold");doc.setFontSize(10);const w10=doc.getTextWidth(nm);
   const fz=Math.min(52,av/w10*10)*Math.min(1,eff("company"));doc.setFontSize(fz);const nw=doc.getTextWidth(nm);
   doc.setTextColor(...accRGB());doc.text(nm,x0,6+lh*.58,{charSpace:Math.max(0,(av-nw)/(nm.length-1))});
   doc.setFont("helvetica","normal");doc.setFontSize(10);const t10=doc.getTextWidth(tg),tz=Math.min(9*Math.max(.6,eff("company")),av/t10*10);doc.setFontSize(tz);doc.setTextColor(110);const tw=doc.getTextWidth(tg);doc.text(tg,x0,6+lh*.93,{charSpace:Math.max(0,(av-tw)/(tg.length-1))});
   doc.setDrawColor(...accRGB());doc.setLineWidth(.9);doc.line(14,lh+10,W-14,lh+10);y=lh+10}
- doc.setTextColor(...ink);const fz=9*eff("text"),lh=fz*.3528*1.55,fh=9*eff("head");y+=7;
- doc.setFontSize(fz);doc.setFont("helvetica","bold");const lw0=Math.max(...["Quotation No","Date","Valid Until"].map(l=>doc.getTextWidth(l)))+3;
- [["Quotation No",val("quoteNo")],["Date",val("quoteDate")],["Valid Until",val("expiryDate")]].forEach(r=>{doc.setFont("helvetica","bold");doc.text(r[0],14,y);doc.text(":",14+lw0,y);doc.setFont("helvetica","normal");doc.text(String(r[1]||"-"),14+lw0+3,y);y+=lh});
- y+=3;doc.setFont("helvetica","bold");doc.setFontSize(fh);doc.text("BILL TO",14,y);doc.text("BILLING PARTNER",W-14,y,{align:"right"});y+=fh*.3528*1.7;
- doc.setFontSize(fz);const B=[["Customer Name",val("customerName")],["Address",val("customerAddress")],["GSTIN",val("customerGST")],["Contact",(val("contactPerson")+" "+val("customerMobile")).trim()],["Email",val("customerEmail")]];
- doc.setFont("helvetica","bold");const bl=Math.max(...B.map(r=>doc.getTextWidth(r[0])))+3;let yl=y;
- B.forEach(r=>{doc.setFont("helvetica","bold");doc.text(r[0],14,yl);doc.text(":",14+bl,yl);doc.setFont("helvetica","normal");doc.splitTextToSize(r[1]||"-",Math.max(30,W/2-22-bl)).forEach(l=>{doc.text(l,14+bl+3,yl);yl+=lh})});
- doc.setFont("helvetica","normal");let yr=y;
- [val("partnerName"),"Bank: "+(val("bankName")||"-")+" "+val("bankBranch"),"A/C: "+(val("bankAccount")||"-")+"  IFSC: "+(val("bankIFSC")||"-"),"Order By: "+(val("orderBy")||"-"),"Prepared By: "+(val("preparedBy")||"-")].filter(Boolean).forEach(t=>doc.splitTextToSize(t,W/2-22).forEach(l=>{doc.text(l,W-14,yr,{align:"right"});yr+=lh}));
- return Math.max(yl,yr)+5}
+ y+=6;const fz=9*eff("text"),lh2=fz*.3528*1.55,fh=9*eff("head"),bw=(CW-6)/2,pad=3.5,hh=fh*.3528*2.2;doc.setFontSize(fz);
+ const rowsL=[["Quotation No",val("quoteNo")],["Date",val("quoteDate")],["Valid Until",val("expiryDate")],["Customer Name",val("customerName")],["Address",val("customerAddress")],["GSTIN",val("customerGST")],["Contact",(val("contactPerson")+" "+val("customerMobile")).trim()],["Email",val("customerEmail")]];
+ const rowsR=[["Partner Name",val("partnerName")],["Bank",val("bankName")],["Branch",val("bankBranch")],["A/C No",val("bankAccount")],["IFSC",val("bankIFSC")],["Order By",val("orderBy")],["Prepared By",val("preparedBy")]];
+ const mk=rows=>{doc.setFont("helvetica","bold");const lw=Math.max(...rows.map(r=>doc.getTextWidth(r[0])))+2;doc.setFont("helvetica","normal");const out=rows.map(r=>({l:r[0],t:doc.splitTextToSize(String(r[1]||""),bw-2*pad-lw-4)}));return{lw,out,h:out.reduce((s,o)=>s+Math.max(1,o.t.length)*lh2,0)}};
+ const L=mk(rowsL),R=mk(rowsR),bh=pad*2+hh+Math.max(L.h,R.h);
+ const draw=(x,title,B)=>{doc.setDrawColor(205,175,178);doc.setLineWidth(.3);doc.roundedRect(x,y,bw,bh,1.5,1.5);doc.setFont("helvetica","bold");doc.setFontSize(fh);doc.setTextColor(...accRGB());doc.text(title,x+pad,y+pad+fh*.3528);doc.setDrawColor(...accRGB());doc.setLineWidth(.4);doc.line(x+pad,y+pad+hh-1,x+bw-pad,y+pad+hh-1);doc.setFontSize(fz);doc.setTextColor(...ink);let yy=y+pad+hh+fz*.3528;B.out.forEach(o=>{doc.setFont("helvetica","bold");doc.text(o.l,x+pad,yy);doc.text(":",x+pad+B.lw+1,yy);doc.setFont("helvetica","normal");(o.t.length?o.t:[""]).forEach(l=>{doc.text(l,x+pad+B.lw+4,yy);yy+=lh2})})};
+ draw(14,"BILLING DETAILS",L);draw(14+bw+6,"BILLING PARTNER",R);doc.setTextColor(...ink);return y+bh+6}
 function pdfCell(v,c,i,fs){const st=Object.assign({},c.st,i.cs&&i.cs[c.key]);if(!st.size&&!st.color&&!st.bold)return v;const s={};if(st.size)s.fontSize=fs*st.size/100;if(st.color)s.textColor=hex2rgb(st.color);if(st.bold)s.fontStyle="bold";return{content:v,styles:s}}
 /* sizes */
 const SZ=[["master","All text (master)"],["company","Company heading"],["head","Section headings"],["text","Customer / partner / meta"],["notes","Specification & terms"],["thead","Table headers"],["body","Product rows"],["totals","Totals"]];
 function drawSz(){document.getElementById("szBox").innerHTML=SZ.map(([k,l])=>`<div class="szrow ${k==="master"?"szm":""}"><span>${l}</span><input type="range" min="50" max="200" step="5" value="${Math.round(LAY.sz[k]*100)}" oninput="szSet('${k}',this.value,this)"><output>${Math.round(LAY.sz[k]*100)}%</output></div>`).join("")+'<button class="btn" onclick="szReset()">Reset sizes</button>'}
 function szSet(k,v,el){LAY.sz[k]=v/100;layStore();el.nextElementSibling.textContent=v+"%";renderQuote()}
-function szReset(){SZ.forEach(([k])=>LAY.sz[k]=1);layStore();drawSz();renderQuote()}
-/* column / cell styling */
-let sel=null;const selItem=()=>items.find(x=>String(x.id)===String(sel&&sel.id)),selCol=()=>cols.find(c=>c.key===(sel&&sel.key));
-function getSt(){if(!sel)return{};if(sel.t==="cell"){const it=selItem();return(it&&it.cs&&it.cs[sel.key])||{}}const c=selCol();return(c&&c[document.getElementById("fmtScope").value==="head"?"sth":"st"])||{}}
-function stSet(p,v){if(!sel)return;if(sel.t==="cell"){const it=selItem();if(!it)return;it.cs=it.cs||{};it.cs[sel.key]=Object.assign(it.cs[sel.key]||{},{[p]:v})}else{const c=selCol();if(!c)return;const k=document.getElementById("fmtScope").value==="head"?"sth":"st";c[k]=Object.assign(c[k]||{},{[p]:v});saveCols()}renderQuote()}
-function stStep(d){stSet("size",Math.max(50,Math.min(300,(getSt().size||100)+d)));updFmtBar()}
-function stClear(){if(!sel)return;if(sel.t==="cell"){const it=selItem();if(it&&it.cs)delete it.cs[sel.key]}else{const c=selCol();if(c){delete c[document.getElementById("fmtScope").value==="head"?"sth":"st"];saveCols()}}renderQuote();updFmtBar()}
-function selectTarget(s){sel=s;updFmtBar();paintSel()}
+function szReset(){Object.assign(LAY.sz,FACTORY_SZ);layStore();drawSz();renderQuote()}
+/* column / cell styling (multi-select) */
+let sel=null;const colOf=k=>cols.find(c=>c.key===k),itOf=id=>items.find(x=>String(x.id)===String(id)),scopeKey=()=>document.getElementById("fmtScope").value==="head"?"sth":"st";
+function selList(){return!sel?[]:sel.t==="col"?sel.keys.map(k=>({o:colOf(k)})).filter(x=>x.o):sel.cells.map(c=>({o:itOf(c.id),k:c.key})).filter(x=>x.o)}
+function getSt(){const L=selList();if(!L.length)return{};const x=L[0];return sel.t==="cell"?((x.o.cs&&x.o.cs[x.k])||{}):(x.o[scopeKey()]||{})}
+function stSet(p,v){selList().forEach(x=>{if(sel.t==="cell"){x.o.cs=x.o.cs||{};x.o.cs[x.k]=Object.assign(x.o.cs[x.k]||{},{[p]:v})}else x.o[scopeKey()]=Object.assign(x.o[scopeKey()]||{},{[p]:v})});if(sel&&sel.t==="col")saveCols();renderQuote()}
+function stStep(d){if(!selList().length)return;stSet("size",Math.max(50,Math.min(300,(getSt().size||100)+d)));updFmtBar()}
+function stClear(){selList().forEach(x=>{if(sel.t==="cell"){if(x.o.cs)delete x.o.cs[x.k]}else delete x.o[scopeKey()]});if(sel&&sel.t==="col")saveCols();renderQuote();updFmtBar()}
+function pickCol(key,e){const C=outCols(printing).map(c=>c.key);if(e.shiftKey&&sel&&sel.t==="col"&&sel.keys.length){const a=C.indexOf(sel.keys[sel.keys.length-1]),b=C.indexOf(key),r=C.slice(Math.min(a,b),Math.max(a,b)+1);sel.keys=[...new Set([...sel.keys,...r])]}else if((e.ctrlKey||e.metaKey||multi)&&sel&&sel.t==="col"){const k=sel.keys.indexOf(key);if(k>=0)sel.keys.splice(k,1);else sel.keys.push(key);if(!sel.keys.length)sel=null}else sel={t:"col",keys:[key]};updFmtBar();paintSel()}
+function pickCell(key,id,e){if((e.ctrlKey||e.metaKey||e.shiftKey||multi)&&sel&&sel.t==="cell"){const i=sel.cells.findIndex(c=>c.key===key&&String(c.id)===String(id));if(i>=0)sel.cells.splice(i,1);else sel.cells.push({key,id});if(!sel.cells.length)sel=null}else sel={t:"cell",cells:[{key,id}]};updFmtBar();paintSel()}
+function toggleMulti(){multi=!multi;renderQuote()}
+function selectAllCols(){sel={t:"col",keys:outCols(printing).map(c=>c.key)};updFmtBar();paintSel()}
+function cellsToCols(){if(sel&&sel.t==="cell"){sel={t:"col",keys:[...new Set(sel.cells.map(c=>c.key))]};updFmtBar();paintSel()}}
 function selClear(){sel=null;updFmtBar();paintSel()}
-function updFmtBar(){const b=document.getElementById("fmtBar");b.style.display=sel?"flex":"none";if(!sel)return;const c=selCol(),st=getSt(),cell=sel.t==="cell";document.getElementById("fmtTarget").textContent=(cell?"Cell · ":"Column · ")+(c?c.label:"");document.getElementById("fmtSize").textContent=(st.size||100)+"%";document.getElementById("fmtColor").value=st.color||"#222222";document.getElementById("fmtBold").checked=!!st.bold;document.getElementById("fmtScope").style.display=cell?"none":"";document.getElementById("fmtToCol").style.display=cell?"":"none"}
-function paintSel(){document.querySelectorAll("#itemsPreview .sel").forEach(e=>e.classList.remove("sel"));if(!sel)return;const q=sel.t==="col"?`[data-col="${sel.key}"]`:`tr[data-item-id="${sel.id}"] [data-col="${sel.key}"]`;document.querySelectorAll("#itemsPreview "+q).forEach(e=>{if(sel.t==="col"||!e.matches("th"))e.classList.add("sel")})}
+function updFmtBar(){const b=document.getElementById("fmtBar");b.style.display=sel?"flex":"none";if(!sel)return;const cell=sel.t==="cell",n=cell?sel.cells.length:sel.keys.length,f=colOf(cell?sel.cells[0].key:sel.keys[0]),st=getSt();document.getElementById("fmtTarget").textContent=cell?(n===1?"Cell · "+(f?f.label:""):n+" cells selected"):(n===1?"Column · "+(f?f.label:""):n+" columns selected");document.getElementById("fmtSize").textContent=(st.size||100)+"%";document.getElementById("fmtColor").value=st.color||"#222222";document.getElementById("fmtBold").checked=!!st.bold;document.getElementById("fmtScope").style.display=cell?"none":"";document.getElementById("fmtToCol").style.display=cell?"":"none"}
+function paintSel(){document.querySelectorAll("#itemsPreview .sel").forEach(e=>e.classList.remove("sel"));if(!sel)return;if(sel.t==="col")sel.keys.forEach(k=>document.querySelectorAll(`#itemsPreview [data-col="${k}"]`).forEach(e=>e.classList.add("sel")));else sel.cells.forEach(c=>document.querySelectorAll(`#itemsPreview tr[data-item-id="${c.id}"] td[data-col="${c.key}"]`).forEach(e=>e.classList.add("sel")))}
 function applySt(el,st){if(!st)return;if(st.size)el.style.fontSize=st.size+"%";if(st.color)el.style.color=st.color;if(st.bold)el.style.fontWeight="700"}
 const _rq5=renderQuote;renderQuote=function(){_rq5();const C=outCols(printing),b=document.getElementById("billPreview");
- if(b)b.innerHTML=[["Customer Name",val("customerName")],["Address",val("customerAddress")],["GSTIN",val("customerGST")],["Contact",(val("contactPerson")+" "+val("customerMobile")).trim()],["Email",val("customerEmail")]].map(([l,v])=>`<div class="kv"><b>${l}</b><span>:</span><span>${esc(v||"-")}</span></div>`).join("");
+ const kv=r=>r.map(([l,v])=>`<div class="kv"><b>${l}</b><span>:</span><span>${esc(v||"")}</span></div>`).join("");
+ if(b)b.innerHTML=kv([["Quotation No",val("quoteNo")],["Date",val("quoteDate")],["Valid Until",val("expiryDate")],["Customer Name",val("customerName")],["Address",val("customerAddress")],["GSTIN",val("customerGST")],["Contact",(val("contactPerson")+" "+val("customerMobile")).trim()],["Email",val("customerEmail")]]);
+ const pb=document.getElementById("partnerPreview");if(pb)pb.innerHTML=kv([["Partner Name",val("partnerName")],["Bank",val("bankName")],["Branch",val("bankBranch")],["A/C No",val("bankAccount")],["IFSC",val("bankIFSC")],["Order By",val("orderBy")],["Prepared By",val("preparedBy")]]);
  document.querySelectorAll("#itemsPreview .items-table").forEach(tb=>{tb.querySelectorAll("thead th").forEach((th,k)=>{const c=C[k];if(!c)return;th.dataset.col=c.key;applySt(th,c.sth)});tb.querySelectorAll("tbody tr[data-item-id]").forEach(tr=>{const it=items.find(x=>String(x.id)===tr.dataset.itemId);tr.querySelectorAll("td").forEach((td,k)=>{const c=C[k];if(!c)return;td.dataset.col=c.key;applySt(td,Object.assign({},c.st,it&&it.cs&&it.cs[c.key]))})})});paintSel()};
-const _al2=applyLay;applyLay=function(){_al2();const p=document.getElementById("paper");[["company","company"],["head","head"],["text","text"],["notes","notes"],["totals","totals"]].forEach(([v,k])=>p.style.setProperty("--sz-"+v,eff(k)))};
+const _al2=applyLay;applyLay=function(){_al2();const p=document.getElementById("paper");[["company","company"],["head","head"],["text","text"],["notes","notes"],["totals","totals"]].forEach(([v,k])=>p.style.setProperty("--sz-"+v,eff(k)));p.style.setProperty("--sz-all",LAY.sz.master)};
 /* images: drag & drop (one or many files) */
 function setImageFromFile(id,f,done){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,200/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);const it=items.find(z=>String(z.id)===String(id));if(it)it.image=c.toDataURL("image/jpeg",.8);done&&done()};im.src=r.result};r.readAsDataURL(f)}
 function pickImage(id){const inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.onchange=()=>{if(inp.files[0])setImageFromFile(id,inp.files[0],renderQuote)};inp.click()}
@@ -778,9 +795,21 @@ function dropImages(id,files){const imgs=[...files].filter(f=>f.type.startsWith(
  T.addEventListener("dragover",e=>{const td=cell(e);if(td){e.preventDefault();td.classList.add("dragover")}});T.addEventListener("dragleave",e=>{const td=cell(e);td&&td.classList.remove("dragover")});
  T.addEventListener("drop",e=>{const td=cell(e);if(!td)return;e.preventDefault();td.classList.remove("dragover");dropImages(td.dataset.img,e.dataTransfer.files)});
  ["dragover","drop"].forEach(n=>addEventListener(n,e=>{if(!cell(e))e.preventDefault()}));
- T.addEventListener("click",e=>{if(e.target.closest(".img-x,.img-add,.editor-table-actions"))return;const th=e.target.closest("th[data-col]");if(th){selectTarget({t:"col",key:th.dataset.col});return}const td=e.target.closest("td[data-col]");if(td&&!td.matches("[data-img]"))selectTarget({t:"cell",key:td.dataset.col,id:td.closest("tr").dataset.itemId})});
+ T.addEventListener("click",e=>{if(e.target.closest(".img-x,.img-add,.editor-table-actions"))return;const th=e.target.closest("th[data-col]");if(th){pickCol(th.dataset.col,e);return}const td=e.target.closest("td[data-col]");if(td&&!td.matches("[data-img]"))pickCell(td.dataset.col,td.closest("tr").dataset.itemId,e)});
  drawSz();updFmtBar()})();
 renderQuote();
+</script>
+<script>
+/* ===== v9: defaults, multi-select ===== */
+const rj=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
+function syncLayUI(){document.getElementById("layAccent").value=LAY.accent;document.getElementById("layOrient").value=LAY.orient;document.getElementById("layPaper").value=LAY.paper||"a4";document.querySelectorAll("#layoutPanel [data-k]").forEach(c=>c.checked=!LAY.hide[c.dataset.k])}
+function applyDefaults(l,c){Object.keys(LAY).forEach(k=>delete LAY[k]);Object.assign(LAY,JSON.parse(JSON.stringify(l)));LAY.hide=LAY.hide||{};LAY.sz=Object.assign({},FACTORY_SZ,LAY.sz||{});cols=JSON.parse(JSON.stringify(c));layStore();saveCols();syncLayUI();drawSz();renderQuote()}
+function saveDefaults(){try{localStorage.setItem("tbhs_defaults",JSON.stringify({lay:LAY,cols:cols}));toast("Saved as default for all formats (A, B and C)")}catch(e){toast("Could not save default")}}
+function restoreDefaults(){const d=rj("tbhs_defaults");if(!d||!d.lay||!d.cols){toast("No saved default yet — restoring factory settings");factoryReset();return}applyDefaults(d.lay,d.cols);toast("Back to your saved default")}
+function factoryReset(){applyDefaults(FACTORY,DEFAULT_COLS);toast("Factory settings restored")}
+syncLayUI();
+renderQuote();
+document.querySelectorAll(".mock-logo-img").forEach(i=>i.src=TBHS_LOGO);
 </script>
 </body>
 </html>
