@@ -231,6 +231,12 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 .items-table th{user-select:none}
 .mock-head{justify-content:center!important}.mock-company{display:none}.mock-logo-img{height:clamp(28px,3.6vw,50px);width:auto}.mock-parties>div span{display:block}.mock-parties i{font-style:normal;font-weight:700}
 </style>
+<style>
+.paper .paper-head{flex-direction:column;align-items:center;text-align:center;gap:8px;border-bottom:0;padding-bottom:12px}.paper .paper-head .logo{justify-content:center;gap:16px}
+.paper .logo-text{font-size:calc(36px*var(--sz-company,1));line-height:1.05;white-space:nowrap;letter-spacing:1px;color:var(--maroon)}.paper .logo-img:not(.foot-logo){height:calc(66px*var(--sz-company,1))}
+.head-contact{font-size:calc(11.5px*var(--sz-all,1));color:#5b4e50;letter-spacing:.3px}.head-hint{color:#a99a9c;font-size:10px;font-style:italic}
+.paper .ribbon{letter-spacing:2.5px;font-weight:700;margin-bottom:16px}
+</style>
 </head>
 <body class="format-section">
 <div class="app" id="appRoot">
@@ -263,8 +269,8 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
   </div>
   <div class="selected-preview" id="selectedFormatPreview">
     <div class="preview-paper" id="landingQuotePaper">
-      <div class="mock-head"><div class="mock-brand"><img class="mock-logo-img" alt="TBHS"><div><b>THE BIG HOTEL STORE</b><small>HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS</small></div></div><div class="mock-company">www.thebighotelstore.com<br>Sales &amp; Project Solutions<br>India</div></div>
-      <div class="mock-ribbon">FABRICATED &amp; IMPORTED KITCHEN EQUIPMENT · HORECA · CHAFING &amp; BUFFET DISPLAY</div>
+      <div class="mock-head"><div class="mock-brand"><img class="mock-logo-img" alt="TBHS"><div><b>THE BIG HOTEL STORE</b><small>Address · Phone · Email</small></div></div><div class="mock-company">www.thebighotelstore.com<br>Sales &amp; Project Solutions<br>India</div></div>
+      <div class="mock-ribbon">HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS</div>
             <div class="mock-parties"><div><b>BILLING DETAILS</b><span><i>Quotation No</i> : QT-TBHS-EQP-000001</span><span><i>Date</i> : 26-10-2026</span><span><i>Valid Until</i> : 09-11-2026</span><span><i>Customer Name</i> : Sample Hotel &amp; Resort</span><span><i>Address</i> : Lucknow, Uttar Pradesh</span><span><i>GSTIN</i> :</span><span><i>Contact</i> :</span><span><i>Email</i> :</span></div><div><b>BILLING PARTNER</b><span><i>Partner Name</i> : The Big Hotel Store</span><span><i>Bank</i> :</span><span><i>Branch</i> :</span><span><i>A/C No</i> :</span><span><i>IFSC</i> :</span><span><i>Order By</i> :</span><span><i>Prepared By</i> : Employee Name</span></div></div>
       <div class="mock-intro">Dear Sir/Madam,<br>Please find below our quotation for the listed products and services.</div>
       <div class="mock-section-title" id="mockSectionTitle">DUCTING</div>
@@ -295,6 +301,12 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
   <aside class="editor">
     <button class="btn back-btn" onclick="backToFormats()">← Back to formats</button><h1>Edit Quotation</h1><div class="sub">Test version · Local demo data</div>
     <div class="steps"><div class="step active">1 Details</div><div class="step active">2 Products</div><div class="step active">3 Preview</div></div>
+    <section class="panel" id="companyPanel">
+      <h3>COMPANY LETTERHEAD</h3>
+      <label>Address</label><input id="companyAddr" placeholder="Branch / address line" oninput="companySave()">
+      <div class="two"><div><label>Phone</label><input id="companyPhone" placeholder="+91 …" oninput="companySave()"></div><div><label>Email</label><input id="companyEmail" placeholder="sales@…" oninput="companySave()"></div></div>
+      <p class="mini-note">Shown on one line under the company name on every quotation and PDF. Saved once for all formats.</p>
+    </section>
     <section class="panel">
       <h3>QUOTATION DETAILS</h3>
       <label>Quotation No.</label><input id="quoteNo" value="QT-TBHS-EQP-000001">
@@ -368,10 +380,10 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
     </div>
     <div class="preview-wrap"><article class="paper" id="paper">
       <header class="paper-head">
-        <div class="logo"><img class="logo-img" alt="TBHS logo"><div class="logo-text">THE BIG<br>HOTEL STORE<small>HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS</small></div></div>
-        <div class="company-info"><b>THE BIG HOTEL STORE</b><br>Branch / Address: Replace with official company details<br>Phone: Replace with official contact details<br>Email / Website: Replace with official details</div>
+        <div class="logo"><img class="logo-img" alt="TBHS logo"><div class="logo-text">THE BIG HOTEL STORE</div></div>
+        <div class="head-contact" id="headContact"></div>
       </header>
-      <div class="ribbon">FABRICATED & IMPORTED KITCHEN EQUIPMENT · HORECA · CHAFING & BUFFET DISPLAY</div>
+      <div class="ribbon">HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS</div>
       <div class="quote-heading"><div class="quote-meta" id="metaPreview"></div></div>
       <div class="parties">
         <section class="party"><h3>BILLING DETAILS</h3><div id="billPreview"></div></section>
@@ -706,7 +718,7 @@ function togglePanel(){document.getElementById("appRoot").classList.toggle("pane
 const sizeBar=()=>{const b=document.querySelector(".topbar");if(b)document.documentElement.style.setProperty("--tb",b.offsetHeight+"px")};addEventListener("resize",sizeBar);
 function updStudioBar(){const t=document.getElementById("studioTitle");if(!t)return;t.textContent=(val("quoteNo")||"Quotation")+" · "+(val("customerName")||"Customer");document.querySelectorAll("#fmtSwitch button").forEach(b=>b.classList.toggle("on",b.dataset.f===currentFormat));sizeBar()}
 const _rq2=renderQuote;renderQuote=function(){_rq2();applyLay();updStudioBar()};
-function enableStudioEditing(){document.getElementById("paper").ondblclick=e=>{if(e.target.closest("#itemsPreview"))return;for(const [sel,id,tab] of [["#metaPreview","quoteNo","details"],["#billPreview","customerName","details"],["#partnerPreview","partnerName","details"],["#specPreview","specifications","details"],["#termsPreview","terms","layout"]]){if(e.target.closest(sel)){openPanel(tab);const el=document.getElementById(id);el.scrollIntoView({block:"center"});el.focus();return}}}}
+function enableStudioEditing(){document.getElementById("paper").ondblclick=e=>{if(e.target.closest("#itemsPreview"))return;for(const [sel,id,tab] of [[".paper-head","companyAddr","details"],["#metaPreview","quoteNo","details"],["#billPreview","customerName","details"],["#partnerPreview","partnerName","details"],["#specPreview","specifications","details"],["#termsPreview","terms","layout"]]){if(e.target.closest(sel)){openPanel(tab);const el=document.getElementById(id);el.scrollIntoView({block:"center"});el.focus();return}}}}
 function startCreate(){setFormat(landingFormat);["navPage","landingPage"].forEach(id=>document.getElementById(id).style.display="none");const app=document.getElementById("appRoot");app.classList.remove("editing","full-quote");app.classList.add("studio");document.querySelector(".editor").style.display="block";document.querySelector(".workspace").style.display="block";panelTab(curTab);enableStudioEditing();sizeBar();window.scrollTo(0,0)}
 const _bf=backToFormats;backToFormats=function(){document.getElementById("appRoot").classList.remove("studio");_bf()};
 const _sp2=showAppPage;showAppPage=function(p){if(p!=="Create Quotation")document.getElementById("appRoot").classList.remove("studio");_sp2(p)};
@@ -746,12 +758,13 @@ document.querySelectorAll(".logo-img").forEach(i=>i.src=TBHS_LOGO);
 /* ===== v8: text sizes, cell/column styling, drag&drop images, labelled bill-to ===== */
 const hex2rgb=h=>[1,3,5].map(i=>parseInt(String(h).substr(i,2),16)||0);
 function pdfTop(doc,W){const ink=[48,40,42],CW=W-28,land=W>doc.internal.pageSize.getHeight();let y=8;
- if(!LAY.hide.head){const lh=22,lw=lh*TBHS_AR,gw=land?CW*.8:CW,gx=14+(CW-gw)/2,x0=gx+lw+5,av=gw-lw-5,nm="THE BIG HOTEL STORE",tg="HOTELWARE - KITCHEN EQUIPMENT - HOSPITALITY SOLUTIONS";
+ if(!LAY.hide.head){const lh=22,lw=lh*TBHS_AR,gw=land?CW*.9:CW,gx=14+(CW-gw)/2,x0=gx+lw+5,av=gw-lw-5,nm="THE BIG HOTEL STORE",tg="HOTELWARE · KITCHEN EQUIPMENT · HOSPITALITY SOLUTIONS";
   doc.addImage(TBHS_LOGO,"JPEG",gx,6,lw,lh);doc.setFont("helvetica","bold");doc.setFontSize(10);const w10=doc.getTextWidth(nm);
-  const fz=Math.min(52,av/w10*10)*Math.min(1,eff("company"));doc.setFontSize(fz);const nw=doc.getTextWidth(nm);
-  doc.setTextColor(...accRGB());doc.text(nm,x0,6+lh*.58,{charSpace:Math.max(0,(av-nw)/(nm.length-1))});
-  doc.setFont("helvetica","normal");doc.setFontSize(10);const t10=doc.getTextWidth(tg),tz=Math.min(9*Math.max(.6,eff("company")),av/t10*10);doc.setFontSize(tz);doc.setTextColor(110);const tw=doc.getTextWidth(tg);doc.text(tg,x0,6+lh*.93,{charSpace:Math.max(0,(av-tw)/(tg.length-1))});
-  doc.setDrawColor(...accRGB());doc.setLineWidth(.9);doc.line(14,lh+10,W-14,lh+10);y=lh+10}
+  const fz=Math.min(60,av/w10*10)*Math.min(1,eff("company"));doc.setFontSize(fz);const nw=doc.getTextWidth(nm);
+  doc.setTextColor(...accRGB());doc.text(nm,x0,6+lh*.55,{charSpace:Math.max(0,(av-nw)/(nm.length-1))});
+  const cl=coLine();if(cl){doc.setFont("helvetica","normal");doc.setFontSize(10);const c10=doc.getTextWidth(cl),cz=Math.min(9*Math.max(.7,eff("company")),av/c10*10);doc.setFontSize(cz);doc.setTextColor(80);doc.text(cl,x0+av/2,6+lh*.92,{align:"center"})}
+  if(!LAY.hide.ribbon){doc.setFillColor(...accRGB());doc.rect(14,lh+9,CW,7,"F");doc.setFont("helvetica","bold");doc.setFontSize(8*Math.max(.8,eff("head")));doc.setTextColor(255);doc.text(tg,W/2,lh+9+4.7,{align:"center",charSpace:.5});y=lh+16}
+  else{doc.setDrawColor(...accRGB());doc.setLineWidth(.9);doc.line(14,lh+10,W-14,lh+10);y=lh+10}}
  y+=6;const fz=9*eff("text"),lh2=fz*.3528*1.55,fh=9*eff("head"),bw=(CW-6)/2,pad=3.5,hh=fh*.3528*2.2;doc.setFontSize(fz);
  const rowsL=[["Quotation No",val("quoteNo")],["Date",val("quoteDate")],["Valid Until",val("expiryDate")],["Customer Name",val("customerName")],["Address",val("customerAddress")],["GSTIN",val("customerGST")],["Contact",(val("contactPerson")+" "+val("customerMobile")).trim()],["Email",val("customerEmail")]];
  const rowsR=[["Partner Name",val("partnerName")],["Bank",val("bankName")],["Branch",val("bankBranch")],["A/C No",val("bankAccount")],["IFSC",val("bankIFSC")],["Order By",val("orderBy")],["Prepared By",val("preparedBy")]];
@@ -810,6 +823,15 @@ function factoryReset(){applyDefaults(FACTORY,DEFAULT_COLS);toast("Factory setti
 syncLayUI();
 renderQuote();
 document.querySelectorAll(".mock-logo-img").forEach(i=>i.src=TBHS_LOGO);
+</script>
+<script>
+/* ===== v10: letterhead (one-line name, editable contact line, tagline strip) ===== */
+const coGet=()=>Object.assign({addr:"",phone:"",email:""},rj("tbhs_company")||{});
+function coLine(){const c=coGet();return[c.addr,c.phone&&"Phone: "+c.phone,c.email&&"Email: "+c.email].filter(Boolean).join("   |   ")}
+function companySave(){try{localStorage.setItem("tbhs_company",JSON.stringify({addr:val("companyAddr"),phone:val("companyPhone"),email:val("companyEmail")}))}catch(e){}renderQuote()}
+const _rq6=renderQuote;renderQuote=function(){_rq6();const h=document.getElementById("headContact"),l=coLine();if(h)h.innerHTML=l?esc(l):'<span class="no-print head-hint">Add address · phone · email in the Details tab</span>'};
+(function(){const c=coGet();document.getElementById("companyAddr").value=c.addr;document.getElementById("companyPhone").value=c.phone;document.getElementById("companyEmail").value=c.email})();
+renderQuote();
 </script>
 </body>
 </html>
