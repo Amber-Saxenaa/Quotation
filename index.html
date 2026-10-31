@@ -237,6 +237,11 @@ body.format-premium .paper{border-top:7px solid var(--red)}body.format-premium .
 .head-contact{font-size:calc(11.5px*var(--sz-all,1));color:#5b4e50;letter-spacing:.3px}.head-hint{color:#a99a9c;font-size:10px;font-style:italic}
 .paper .ribbon{letter-spacing:2.5px;font-weight:700;margin-bottom:16px}
 </style>
+<style>
+@media print{.parties{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}.party{min-height:0!important;break-inside:avoid}.paper{padding:12mm 10mm 18mm!important;min-height:0!important}.paper-foot{left:10mm!important;right:10mm!important}}
+@media(min-width:560px){.app.studio .parties{grid-template-columns:1fr 1fr}}
+.foot-brand{white-space:nowrap}
+</style>
 </head>
 <body class="format-section">
 <div class="app" id="appRoot">
